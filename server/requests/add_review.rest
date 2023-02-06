@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/campgrounds/63e0273c67c52a7e8a142d06/reviews
+Content-Type:application/json
+
+{
+    "body":"RATING BOD!",
+    "rating":5
+}

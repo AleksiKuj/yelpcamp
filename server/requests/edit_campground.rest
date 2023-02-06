@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/campgrounds/63e0273c67c52a7e8a142d06
+Content-Type:application/json
+
+{
+    "title":"title",
+    "location":"lokaatio"
+}

@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/campgrounds
+Content-Type:application/json
+
+{
+    "title":"post test titlexd",
+    "price":-23,
+    "location":"test location",
+    "image":"kfnskfnsk",
+    "description":"Desc"
+}
