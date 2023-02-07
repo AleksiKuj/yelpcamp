@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/campgrounds/63e0273c67c52a7e8a142d06/reviews
+POST http://localhost:3001/api/campgrounds/63e133aaf1d96b3ba0be4335/reviews
 Content-Type:application/json
 
 {

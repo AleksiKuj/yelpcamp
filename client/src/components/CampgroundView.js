@@ -1,9 +1,9 @@
 import { useMatch, useParams, Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import campgroundService from "../services/campgrounds"
+import reviewService from "../services/reviews"
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
-import { LinkContainer } from "react-router-bootstrap"
 import Button from "react-bootstrap/esm/Button"
 import ReviewForm from "./ReviewForm"
 
@@ -19,7 +19,7 @@ const CampgroundView = ({ setNotificationMessage, setNotificationVariant }) => {
       .getOne(match.params.id)
       .then((camp) => setCurrentCamp(camp))
     // console.log(params.campgroundId)
-    console.log(match.params.id)
+    //console.log(match.params.id)
   }, [])
   const handleDelete = () => {
     campgroundService.deleteCamp(match.params.id)
@@ -32,7 +32,7 @@ const CampgroundView = ({ setNotificationMessage, setNotificationVariant }) => {
     navigate("/campgrounds")
   }
   const handleDeleteReview = (id) => {
-    campgroundService.deleteReview(match.params.id, id)
+    reviewService.deleteReview(match.params.id, id)
     setNotificationVariant("danger")
     setNotificationMessage(`Succesfully deleted review`)
     setTimeout(() => {
@@ -89,7 +89,7 @@ const CampgroundView = ({ setNotificationMessage, setNotificationVariant }) => {
           so page updates on removing or adding review
           same for adding reviews */}
           {currentCamp.reviews.map((review) => (
-            <Card className="my-3">
+            <Card className="my-3" key={review.id}>
               <Card.Body>
                 <Card.Text>Rating: {review.rating}</Card.Text>
                 <Card.Text>{review.body}</Card.Text>

@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
 import Button from "react-bootstrap/esm/Button"
 import { useState } from "react"
-import campgroundService from "../services/campgrounds"
+import reviewService from "../services/reviews"
 
 const ReviewForm = ({
   camp,
@@ -27,13 +27,12 @@ const ReviewForm = ({
       rating,
     }
     if (form.checkValidity()) {
-      campgroundService.addReview(camp.id, review)
+      reviewService.addReview(camp.id, review)
       setNotificationVariant("success")
       setNotificationMessage(`Succesfully added ${rating} star review`)
       setTimeout(() => {
         setNotificationMessage("")
       }, 5000)
-      console.log(review)
     }
   }
   return (
