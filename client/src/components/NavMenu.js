@@ -22,6 +22,12 @@ function NavMenu() {
             <LinkContainer to="/campgrounds/new">
               <Nav.Link>New Campground</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/register">
+              <Nav.Link>Sign up</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/login">
+              <Nav.Link>Sign in</Nav.Link>
+            </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Container>

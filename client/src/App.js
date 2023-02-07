@@ -9,6 +9,8 @@ import NavMenu from "./components/NavMenu"
 import Footer from "./components/Footer"
 import NotFound from "./components/NotFound"
 import Notification from "./components/Notification"
+import Register from "./components/Register"
+import Login from "./components/Login"
 import { useState } from "react"
 
 function App() {
@@ -48,6 +50,24 @@ function App() {
               path="/campgrounds/:id/edit"
               element={
                 <EditCampground
+                  setNotificationMessage={setNotificationMessage}
+                  setNotificationVariant={setNotificationVariant}
+                />
+              }
+            ></Route>
+            <Route
+              path="/register"
+              element={
+                <Register
+                  setNotificationMessage={setNotificationMessage}
+                  setNotificationVariant={setNotificationVariant}
+                />
+              }
+            ></Route>
+            <Route
+              path="/login"
+              element={
+                <Login
                   setNotificationMessage={setNotificationMessage}
                   setNotificationVariant={setNotificationVariant}
                 />
