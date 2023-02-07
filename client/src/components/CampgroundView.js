@@ -7,7 +7,7 @@ import { LinkContainer } from "react-router-bootstrap"
 import Button from "react-bootstrap/esm/Button"
 import ReviewForm from "./ReviewForm"
 
-const CampgroundView = () => {
+const CampgroundView = ({ setNotificationMessage, setNotificationVariant }) => {
   const [currentCamp, setCurrentCamp] = useState()
   const [showError, setShowError] = useState("none")
   const match = useMatch("/campgrounds/:id")
@@ -23,7 +23,21 @@ const CampgroundView = () => {
   }, [])
   const handleDelete = () => {
     campgroundService.deleteCamp(match.params.id)
+    setNotificationVariant("danger")
+    setNotificationMessage(`Succesfully deleted ${currentCamp.title}`)
+    setTimeout(() => {
+      setNotificationMessage("")
+    }, 5000)
+
     navigate("/campgrounds")
+  }
+  const handleDeleteReview = (id) => {
+    campgroundService.deleteReview(match.params.id, id)
+    setNotificationVariant("danger")
+    setNotificationMessage(`Succesfully deleted review`)
+    setTimeout(() => {
+      setNotificationMessage("")
+    }, 5000)
   }
 
   //if invalid id show error message
@@ -39,8 +53,9 @@ const CampgroundView = () => {
     )
   }
   return (
+    // CHANGE FROM GRID TO FLEX -> flex-row -> on mobile flex-col
     <div className="row">
-      <div className="col-6 offset-3 p-0 my-5">
+      <div className="col-6  p-2  my-5">
         <Card>
           <Card.Img variant="top" src={currentCamp.image} />
           <Card.Body>
@@ -61,12 +76,33 @@ const CampgroundView = () => {
             </Button>
           </Card.Body>
           <Card.Footer className="text-muted">2 days ago</Card.Footer>
-
-          {/* <Card.Footer className="text-muted">
-          <Link to="/campgrounds">All campgrounds</Link>
-        </Card.Footer> */}
         </Card>
-        <ReviewForm camp={currentCamp} />
+      </div>
+      <div className="col-6  p-2 px-1 my-5">
+        <ReviewForm
+          camp={currentCamp}
+          setNotificationMessage={setNotificationMessage}
+          setNotificationVariant={setNotificationVariant}
+        />
+        <div>
+          {/* move to useEffect and add reviews state
+          so page updates on removing or adding review
+          same for adding reviews */}
+          {currentCamp.reviews.map((review) => (
+            <Card className="my-3">
+              <Card.Body>
+                <Card.Text>Rating: {review.rating}</Card.Text>
+                <Card.Text>{review.body}</Card.Text>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDeleteReview(review.id)}
+                >
+                  DELETE Review!
+                </Button>
+              </Card.Body>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   )

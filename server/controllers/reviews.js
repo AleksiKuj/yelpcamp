@@ -1,0 +1,5 @@
+const reviewsRouter = require("express").Router()
+const Campground = require("../models/campground")
+const Review = require("../models/review")
+const catchAsync = require("../utils/catchAsync")
+const { campgroundSchema, reviewSchema } = require("../utils/validationSchemas")

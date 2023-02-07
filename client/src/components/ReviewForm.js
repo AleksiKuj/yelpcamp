@@ -4,7 +4,11 @@ import Button from "react-bootstrap/esm/Button"
 import { useState } from "react"
 import campgroundService from "../services/campgrounds"
 
-const ReviewForm = ({ camp }) => {
+const ReviewForm = ({
+  camp,
+  setNotificationMessage,
+  setNotificationVariant,
+}) => {
   const [reviewBody, setReviewBody] = useState("")
   const [rating, setRating] = useState(3)
   const [validated, setValidated] = useState(false)
@@ -24,6 +28,11 @@ const ReviewForm = ({ camp }) => {
     }
     if (form.checkValidity()) {
       campgroundService.addReview(camp.id, review)
+      setNotificationVariant("success")
+      setNotificationMessage(`Succesfully added ${rating} star review`)
+      setTimeout(() => {
+        setNotificationMessage("")
+      }, 5000)
       console.log(review)
     }
   }

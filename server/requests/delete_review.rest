@@ -1,0 +1,1 @@
+DELETE http://localhost:3001/api/campgrounds/63e133aaf1d96b3ba0be431b/reviews/63e13420c7d860cfdbe8b299

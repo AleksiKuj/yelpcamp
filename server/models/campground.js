@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const Review = require("./review")
 const Schema = mongoose.Schema
 
 const campgroundSchema = new Schema({
@@ -21,6 +22,17 @@ campgroundSchema.set("toJSON", {
     delete returnedObject._id
     delete returnedObject.__v
   },
+})
+
+//removes campgrounds reviews when deleting campground
+campgroundSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Review.deleteMany({
+      _id: {
+        $in: doc.reviews,
+      },
+    })
+  }
 })
 
 module.exports = mongoose.model("Campground", campgroundSchema)

@@ -8,21 +8,50 @@ import EditCampground from "./components/EditCampground"
 import NavMenu from "./components/NavMenu"
 import Footer from "./components/Footer"
 import NotFound from "./components/NotFound"
+import Notification from "./components/Notification"
+import { useState } from "react"
 
 function App() {
+  const [notificationMessage, setNotificationMessage] = useState("")
+  const [notificationVariant, setNotificationVariant] = useState("")
   return (
     <div className=" d-flex flex-column vh-100">
       <Router>
         <NavMenu />
+        <Notification
+          message={notificationMessage}
+          variant={notificationVariant}
+        />
         <div className="container mt-5">
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/campgrounds" element={<Campgrounds />}></Route>
-            <Route path="/campgrounds/new" element={<NewCampground />}></Route>
-            <Route path="/campgrounds/:id" element={<CampgroundView />}></Route>
+            <Route
+              path="/campgrounds/new"
+              element={
+                <NewCampground
+                  setNotificationMessage={setNotificationMessage}
+                  setNotificationVariant={setNotificationVariant}
+                />
+              }
+            ></Route>
+            <Route
+              path="/campgrounds/:id"
+              element={
+                <CampgroundView
+                  setNotificationMessage={setNotificationMessage}
+                  setNotificationVariant={setNotificationVariant}
+                />
+              }
+            ></Route>
             <Route
               path="/campgrounds/:id/edit"
-              element={<EditCampground />}
+              element={
+                <EditCampground
+                  setNotificationMessage={setNotificationMessage}
+                  setNotificationVariant={setNotificationVariant}
+                />
+              }
             ></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>

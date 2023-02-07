@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
 
-const EditCampground = () => {
+const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [currentCamp, setCurrentCamp] = useState()
   const match = useMatch("/campgrounds/:id/edit")
   const [validated, setValidated] = useState(false)
@@ -45,11 +45,14 @@ const EditCampground = () => {
     }
     if (form.checkValidity()) {
       campgroundService.edit(id, campground)
+
+      setNotificationVariant("success")
+      setNotificationMessage(`Succesfully edited ${campground.title}`)
+      setTimeout(() => {
+        setNotificationMessage("")
+      }, 5000)
       navigate("/campgrounds")
-      console.log(campground)
     }
-    // campgroundService.edit(id, campground)
-    // navigate("/campgrounds")
   }
   if (!currentCamp) {
     return null

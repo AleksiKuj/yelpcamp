@@ -4,12 +4,9 @@ import campgroundService from "../services/campgrounds"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
 
-const NewCampground = () => {
+const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [validated, setValidated] = useState(false)
-
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
   const [description, setDescription] = useState("")
@@ -36,8 +33,14 @@ const NewCampground = () => {
     }
     if (form.checkValidity()) {
       campgroundService.create(campground)
+
+      setNotificationVariant("success")
+      setNotificationMessage(`Succesfully added ${campground.title}`)
+      setTimeout(() => {
+        setNotificationMessage("")
+      }, 5000)
+
       navigate("/campgrounds")
-      console.log(campground)
     }
   }
   return (

@@ -28,6 +28,10 @@ const addReview = async (id, review) => {
   const res = await axios.post(`${baseUrl}/${id}/reviews`, review)
   return res.data
 }
+const deleteReview = async (id, reviewId) => {
+  const res = await axios.delete(`${baseUrl}/${id}/reviews/${reviewId}`)
+  return res.data
+}
 const exports = {
   getAll,
   getOne,
@@ -35,5 +39,6 @@ const exports = {
   edit,
   deleteCamp,
   addReview,
+  deleteReview,
 }
 export default exports
