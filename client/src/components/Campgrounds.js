@@ -32,9 +32,6 @@ const Campgrounds = () => {
                 </Link>
               </Card.Body>
             </Card>
-            {/* <li key={campground.id}>
-              <Link to={campground.id}> {campground.title}</Link>
-            </li> */}
           </div>
         ))}
       </ul>

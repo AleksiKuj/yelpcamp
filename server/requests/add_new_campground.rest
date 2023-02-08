@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/campgrounds
 Content-Type:application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFrc3UiLCJpZCI6IjYzZTM2MzdiZTc5NWJmMmUyMjhkMDczNSIsImlhdCI6MTY3NTg0ODY1M30.cX_7JczdMiTlDxRy2IwgbUif9gIBUjqSt4qhZyB4ddc
 
 {
     "title":"post test titlexd",
-    "price":-23,
+    "price":3,
     "location":"test location",
     "image":"kfnskfnsk",
     "description":"Desc"

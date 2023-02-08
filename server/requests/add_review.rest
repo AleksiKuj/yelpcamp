@@ -1,5 +1,6 @@
-POST http://localhost:3001/api/campgrounds/63e133aaf1d96b3ba0be4335/reviews
+POST http://localhost:3001/api/campgrounds/63e388a42ce982af1dc7a3c3/reviews
 Content-Type:application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFrc3UiLCJpZCI6IjYzZTM2MzdiZTc5NWJmMmUyMjhkMDczNSIsImlhdCI6MTY3NTg1NTUzOX0.-pnGX6U-77VKDM4PIWrTjbkX7sW6o6qU7PWYqO0J2qk
 
 {
     "body":"RATING BOD!",

@@ -45,15 +45,15 @@ app.use(
     saveUninitialized: true,
   })
 )
-app.use(cookieParser("secretCode"))
-//app.use(flash())
+// app.use(cookieParser("secretCode"))
+// //app.use(flash())
 
-app.use(passport.initialize())
-app.use(passport.session())
-passport.use(new LocalStrategy(User.authenticate()))
+// app.use(passport.initialize())
+// app.use(passport.session())
+// passport.use(new LocalStrategy(User.authenticate()))
 
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
+// passport.serializeUser(User.serializeUser())
+// passport.deserializeUser(User.deserializeUser())
 
 app.use("/api/campgrounds", campgroundsRouter)
 app.use("/api/campgrounds/:id/reviews", reviewsRouter)

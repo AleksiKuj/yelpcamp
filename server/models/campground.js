@@ -14,6 +14,10 @@ const campgroundSchema = new Schema({
       ref: "Review",
     },
   ],
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 })
 
 campgroundSchema.set("toJSON", {

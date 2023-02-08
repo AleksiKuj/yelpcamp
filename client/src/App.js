@@ -11,19 +11,34 @@ import NotFound from "./components/NotFound"
 import Notification from "./components/Notification"
 import Register from "./components/Register"
 import Login from "./components/Login"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import reviewsService from "./services/reviews"
+import campgroundsService from "./services/campgrounds"
 
 function App() {
   const [notificationMessage, setNotificationMessage] = useState("")
   const [notificationVariant, setNotificationVariant] = useState("")
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedUser")
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      campgroundsService.setToken(user.token)
+      reviewsService.setToken(user.token)
+    }
+  }, [])
+
   return (
     <div className=" d-flex flex-column vh-100">
       <Router>
-        <NavMenu />
+        <NavMenu user={user} />
         <Notification
           message={notificationMessage}
           variant={notificationVariant}
         />
+
         <div className="container mt-5">
           <Routes>
             <Route path="/" element={<Home />}></Route>
@@ -43,6 +58,7 @@ function App() {
                 <CampgroundView
                   setNotificationMessage={setNotificationMessage}
                   setNotificationVariant={setNotificationVariant}
+                  user={user}
                 />
               }
             ></Route>
@@ -70,6 +86,8 @@ function App() {
                 <Login
                   setNotificationMessage={setNotificationMessage}
                   setNotificationVariant={setNotificationVariant}
+                  setUser={setUser}
+                  user={setUser}
                 />
               }
             ></Route>

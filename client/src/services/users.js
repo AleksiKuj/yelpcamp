@@ -18,25 +18,20 @@ const addUser = async (user) => {
 const login = async (user) => {
   try {
     const res = await axios.post(`${baseUrl}/login`, user)
-    console.log("res", res)
+    console.log("res.data:", res.data)
     return res.data
   } catch (e) {
     if (e.response) {
       console.log(e.response.data)
+
       throw new Error(e.response.data)
     }
     throw new Error("An error occurred")
   }
 }
-const getUser = async () => {
-  const res = await axios.get(`${baseUrl}/getUser`)
-  return console.log(res)
-  //return res.data
-}
 
 const exports = {
   addUser,
   login,
-  getUser,
 }
 export default exports

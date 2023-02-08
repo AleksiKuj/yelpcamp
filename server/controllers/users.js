@@ -3,6 +3,8 @@ const passport = require("passport")
 const User = require("../models/user")
 const catchAsync = require("../utils/catchAsync")
 const { userSchema } = require("../utils/validationSchemas")
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt")
 
 const validateUser = (req, res, next) => {
   //joi userSchema
@@ -16,29 +18,72 @@ const validateUser = (req, res, next) => {
   }
 }
 
+// usersRouter.post(
+//   "/register",
+//   validateUser,
+//   catchAsync(async (req, res) => {
+//     try {
+//       const { email, username, password } = req.body
+//       const user = new User({ email, username })
+//       const newUser = await User.register(user, password)
+//       res.json(newUser)
+//     } catch (e) {
+//       console.log(e.message)
+//       if (e.code === 11000) {
+//         return res.status(400).send("Email already exists")
+//       }
+//       return res.status(400).send(e.message)
+//     }
+//   })
+// )
 usersRouter.post(
   "/register",
   validateUser,
-  catchAsync(async (req, res) => {
-    try {
-      const { email, username, password } = req.body
-      const user = new User({ email, username })
-      const newUser = await User.register(user, password)
-      res.json(newUser)
-    } catch (e) {
-      console.log(e.message)
-      if (e.code === 11000) {
-        return res.status(400).send("Email already exists")
-      }
-      return res.status(400).send(e.message)
-    }
+  catchAsync(async (request, response) => {
+    const { username, email, password } = request.body
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash(password, saltRounds)
+
+    const user = new User({
+      username,
+      email,
+      passwordHash,
+    })
+
+    const savedUser = await user.save()
+
+    response.status(201).json(savedUser)
   })
 )
 
-usersRouter.post("/login", passport.authenticate("local"), (req, res) => {
-  console.log("SIGNED IN")
-  res.json(req.body)
+usersRouter.post("/login", async (request, response) => {
+  const { username, password } = request.body
+
+  const user = await User.findOne({ username })
+  const passwordCorrect =
+    user === null ? false : await bcrypt.compare(password, user.passwordHash)
+
+  if (!(user && passwordCorrect)) {
+    return response.status(401).json({
+      error: "invalid username or password",
+    })
+  }
+
+  const userForToken = {
+    username: user.username,
+    id: user._id,
+  }
+
+  const token = jwt.sign(userForToken, process.env.SECRET)
+
+  response.status(200).send({ token, username: user.username })
 })
+
+// usersRouter.post("/login", passport.authenticate("local"), (req, res) => {
+//   console.log("SIGNED IN")
+//   res.json("auth")
+// })
 
 // usersRouter.post("/login", (req, res, next) => {
 //   passport.authenticate("local", (err, user, info) => {

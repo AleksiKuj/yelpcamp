@@ -7,6 +7,8 @@ const errorHandler = (error, req, res, next) => {
       return res.status(404).json({ error: error.message })
     case "UnauthorizedError":
       return res.status(401).json({ error: error.message })
+    case "JsonWebTokenError":
+      return res.status(400).json({ error: "token missing or invalid" })
     default:
       return res.status(500).json({ error: error.message })
   }

@@ -38,7 +38,7 @@ const Register = ({ setNotificationMessage, setNotificationVariant }) => {
           setNotificationMessage("")
         }, 5000)
 
-        navigate("/campgrounds")
+        navigate("/login")
       } catch (e) {
         console.log("e:", e.message)
         setNotificationVariant("danger")

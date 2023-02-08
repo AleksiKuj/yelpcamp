@@ -1,7 +1,11 @@
 import axios from "axios"
 
 const baseUrl = "http://localhost:3001/api/campgrounds/"
+let token = null
 
+const setToken = (newToken) => {
+  token = `Bearer ${newToken}`
+}
 const getAll = async () => {
   const req = await axios.get(baseUrl)
   return req.data
@@ -12,7 +16,10 @@ const getOne = async (id) => {
 }
 
 const create = async (campground) => {
-  const res = await axios.post(baseUrl, campground)
+  const config = {
+    headers: { Authorization: token },
+  }
+  const res = await axios.post(baseUrl, campground, config)
   return res.data
 }
 
@@ -31,5 +38,6 @@ const exports = {
   create,
   edit,
   deleteCamp,
+  setToken,
 }
 export default exports
