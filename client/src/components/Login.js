@@ -4,6 +4,8 @@ import usersService from "../services/users"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 
+import axios from "axios"
+
 const Login = ({ setNotificationMessage, setNotificationVariant }) => {
   const [validated, setValidated] = useState(false)
   const [username, setUsername] = useState("")
@@ -24,19 +26,21 @@ const Login = ({ setNotificationMessage, setNotificationVariant }) => {
 
     if (form.checkValidity()) {
       try {
-        const user = {
+        const credentials = {
           username,
           password,
         }
-        await usersService.login(user)
+        await usersService.login(credentials)
 
         setNotificationVariant("success")
-        setNotificationMessage(`Succesfully logged in as ${user.username}`)
+        setNotificationMessage(
+          `Succesfully logged in as ${credentials.username}`
+        )
         setTimeout(() => {
           setNotificationMessage("")
         }, 5000)
 
-        navigate("/campgrounds")
+        //navigate("/campgrounds")
       } catch (e) {
         console.log("e:", e.message)
         setNotificationVariant("danger")
@@ -47,8 +51,11 @@ const Login = ({ setNotificationMessage, setNotificationVariant }) => {
       }
     }
   }
+
+  const x = () => usersService.getUser()
   return (
     <div>
+      <button onClick={() => x()}></button>
       <h1 className="text-center">Sign in</h1>
       <Form onSubmit={handleSubmit} noValidate validated={validated}>
         <Form.Group className="mb-3">

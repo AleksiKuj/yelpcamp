@@ -9,6 +9,10 @@ const { errorHandler } = require("./utils/middleware")
 const passport = require("passport")
 const LocalStrategy = require("passport-local")
 const User = require("./models/user")
+const passportLocal = require("passport-local").Strategy
+const cookieParser = require("cookie-parser")
+const bcrypt = require("bcryptjs")
+const bodyParser = require("body-parser")
 
 const campgroundsRouter = require("./controllers/campgrounds")
 const reviewsRouter = require("./controllers/reviews")
@@ -26,21 +30,22 @@ mongoose
   })
 
 app.use(morgan("tiny"))
-app.use(cors())
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+)
 app.use(express.json())
 
-const sessionConfig = {
-  secret: "salaisuus",
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-  },
-}
-
-app.use(session(sessionConfig))
+app.use(
+  session({
+    secret: "secretCode",
+    resave: true,
+    saveUninitialized: true,
+  })
+)
+app.use(cookieParser("secretCode"))
 //app.use(flash())
 
 app.use(passport.initialize())

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import campgroundService from "../services/campgrounds"
 import Button from "react-bootstrap/Button"
@@ -43,6 +43,7 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       navigate("/campgrounds")
     }
   }
+
   return (
     <div>
       <h1 className="text-center">New campground</h1>
