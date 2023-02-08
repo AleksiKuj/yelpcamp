@@ -1,7 +1,15 @@
 require("dotenv").config()
 
 let MONGODB_URI = process.env.MONGODB_URL
+let CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
+let SECRET = process.env.SECRET
+let CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
 
+let CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET
 module.exports = {
   MONGODB_URI,
+  CLOUDINARY_API_KEY,
+  SECRET,
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_SECRET,
 }

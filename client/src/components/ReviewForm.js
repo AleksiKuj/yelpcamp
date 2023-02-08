@@ -3,6 +3,7 @@ import InputGroup from "react-bootstrap/InputGroup"
 import Button from "react-bootstrap/esm/Button"
 import { useState } from "react"
 import reviewService from "../services/reviews"
+import "../stars.css"
 
 const ReviewForm = ({
   camp,
@@ -39,13 +40,41 @@ const ReviewForm = ({
     <div className="mb-3">
       <h2>Leave a review!</h2>
       <Form onSubmit={handleSubmit} noValidate validated={validated}>
-        <Form.Group className="mb-3">
-          <Form.Label>Rating</Form.Label>
-          <Form.Range
-            min={1}
-            max={5}
+        <Form.Group className="mb-0">
+          <fieldset
+            className="starability-basic"
             onChange={(e) => setRating(e.target.value)}
-          />
+          >
+            <input
+              type="radio"
+              id="no-rate"
+              className="input-no-rate"
+              name="rating"
+              value="3"
+              defaultChecked
+              aria-label="No rating."
+            />
+            <input type="radio" id="first-rate1" name="rating" value="1" />
+            <label htmlFor="first-rate1" title="Terrible">
+              1 star
+            </label>
+            <input type="radio" id="first-rate2" name="rating" value="2" />
+            <label htmlFor="first-rate2" title="Not good">
+              2 stars
+            </label>
+            <input type="radio" id="first-rate3" name="rating" value="3" />
+            <label htmlFor="first-rate3" title="Average">
+              3 stars
+            </label>
+            <input type="radio" id="first-rate4" name="rating" value="4" />
+            <label htmlFor="first-rate4" title="Very good">
+              4 stars
+            </label>
+            <input type="radio" id="first-rate5" name="rating" value="5" />
+            <label htmlFor="first-rate5" title="Amazing">
+              5 stars
+            </label>
+          </fieldset>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Review</Form.Label>

@@ -20,7 +20,7 @@ const Campgrounds = () => {
         {campgrounds.map((campground) => (
           <div key={campground.id}>
             <Card style={{}} className="d-flex flex-row">
-              <Card.Img variant="top" src={campground.image} />
+              <Card.Img variant="top" src={campground.images[0].url} />
               <Card.Body>
                 <Card.Title>{campground.title}</Card.Title>
                 <Card.Text>{campground.description}</Card.Text>

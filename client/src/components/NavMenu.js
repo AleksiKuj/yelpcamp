@@ -14,9 +14,9 @@ function NavMenu({ user }) {
         <LinkContainer to="/">
           <Navbar.Brand>YelpCamp</Navbar.Brand>
         </LinkContainer>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="">
             <LinkContainer to="/">
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
@@ -29,7 +29,7 @@ function NavMenu({ user }) {
                 <LinkContainer to="/campgrounds/new">
                   <Nav.Link>New Campground</Nav.Link>
                 </LinkContainer>
-                <Nav.Link>{user.username}</Nav.Link>
+                <Navbar.Text>{user.username}</Navbar.Text>
                 <Nav.Link onClick={() => handleLogout()}>Logout</Nav.Link>
               </>
             ) : (

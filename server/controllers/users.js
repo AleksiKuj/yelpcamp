@@ -5,6 +5,7 @@ const catchAsync = require("../utils/catchAsync")
 const { userSchema } = require("../utils/validationSchemas")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
+const config = require("../utils/config")
 
 const validateUser = (req, res, next) => {
   //joi userSchema
@@ -75,7 +76,7 @@ usersRouter.post("/login", async (request, response) => {
     id: user._id,
   }
 
-  const token = jwt.sign(userForToken, process.env.SECRET)
+  const token = jwt.sign(userForToken, config.SECRET)
 
   response.status(200).send({ token, username: user.username })
 })

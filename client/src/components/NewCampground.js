@@ -10,9 +10,14 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
   const [description, setDescription] = useState("")
-  const [image, setImage] = useState("")
+  const [image, setImage] = useState(null)
   const [price, setPrice] = useState("")
+  const [file, setFile] = useState(null)
   const navigate = useNavigate()
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0])
+  }
 
   const handleSubmit = (e) => {
     const form = e.currentTarget
@@ -28,11 +33,18 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       title,
       location,
       description,
-      image,
       price,
     }
     if (form.checkValidity()) {
-      campgroundService.create(campground)
+      let formData = new FormData()
+      formData.append("file", file)
+      formData.append("title", title)
+      formData.append("location", location)
+      formData.append("description", description)
+      formData.append("price", price)
+
+      campgroundService.create(formData)
+      console.log(formData)
 
       setNotificationVariant("success")
       setNotificationMessage(`Succesfully added ${campground.title}`)
@@ -40,14 +52,18 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
         setNotificationMessage("")
       }, 5000)
 
-      navigate("/campgrounds")
+      //navigate("/campgrounds")
     }
   }
-
   return (
     <div>
       <h1 className="text-center">New campground</h1>
-      <Form onSubmit={handleSubmit} noValidate validated={validated}>
+      <Form
+        onSubmit={handleSubmit}
+        noValidate
+        validated={validated}
+        encType="multipart/form-data"
+      >
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -74,7 +90,18 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        <input type="file" name="file" onChange={handleFileChange} />
+
+        {/* <Form.Group controlId="formFile" className="mb-3">
+          <Form.Label>Image</Form.Label>
+          <Form.Control
+            type="file"
+            // onChange={(e) => setImage(e.target.files[0])}
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+        </Form.Group> */}
+
+        {/* <Form.Group className="mb-3">
           <Form.Label>Image url</Form.Label>
           <Form.Control
             type="text"
@@ -85,7 +112,7 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
           <Form.Control.Feedback type="invalid">
             Please provide a valid url.
           </Form.Control.Feedback>
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>

@@ -5,6 +5,7 @@ const catchAsync = require("../utils/catchAsync")
 const { reviewSchema } = require("../utils/validationSchemas")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
+const config = require("../utils/config")
 const campground = require("../models/campground")
 
 const validateReview = (req, res, next) => {
@@ -28,7 +29,7 @@ reviewsRouter.post(
   catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id)
     const body = req.body
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
     if (!decodedToken.id) {
       return response.status(401).json({ error: "token invalid" })
     }

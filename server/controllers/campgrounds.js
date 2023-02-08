@@ -4,6 +4,10 @@ const User = require("../models/user")
 const catchAsync = require("../utils/catchAsync")
 const { campgroundSchema } = require("../utils/validationSchemas")
 const jwt = require("jsonwebtoken")
+const multer = require("multer")
+const { storage } = require("../cloudinary")
+const upload = multer({ storage })
+const config = require("../utils/config")
 
 const validateCampground = (req, res, next) => {
   //joi campgroundSchema
@@ -22,6 +26,7 @@ campgroundsRouter.get(
     res.json(campgrounds)
   })
 )
+
 campgroundsRouter.get(
   "/:id",
   catchAsync(async (req, res) => {
@@ -41,6 +46,7 @@ campgroundsRouter.get(
     res.json(campground)
   })
 )
+
 campgroundsRouter.put(
   "/:id",
   catchAsync(async (req, res) => {
@@ -49,37 +55,69 @@ campgroundsRouter.put(
     res.json(campground)
   })
 )
+
 const getTokenFrom = (request) => {
   const authorization = request.get("authorization")
   if (authorization && authorization.startsWith("Bearer ")) {
     return authorization.replace("Bearer ", "")
   }
 }
+
 campgroundsRouter.post(
   "/",
-  validateCampground,
-  catchAsync(async (req, res) => {
+
+  upload.array("file"),
+  async (req, res) => {
     const body = req.body
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: "token invalid" })
-    }
+    const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
     const user = await User.findById(decodedToken.id)
 
+    console.log(JSON.stringify(body))
     const campground = new Campground({
       title: body.title,
       description: body.description,
       location: body.location,
-      image: body.image,
       price: body.price,
       user: user._id,
     })
+    campground.images = req.files.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }))
     const savedCampground = await campground.save()
     user.campgrounds = user.campgrounds.concat(savedCampground._id)
     await user.save()
     res.json(savedCampground)
-  })
+
+    // res.send({ message: "File uploaded successfully" })
+  }
 )
+
+// campgroundsRouter.post(
+//   "/",
+//   validateCampground,
+//   catchAsync(async (req, res) => {
+//     const body = req.body
+//     const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
+//     if (!decodedToken.id) {
+//       return response.status(401).json({ error: "token invalid" })
+//     }
+//     const user = await User.findById(decodedToken.id)
+
+//     const campground = new Campground({
+//       title: body.title,
+//       description: body.description,
+//       location: body.location,
+//       image: body.image,
+//       price: body.price,
+//       user: user._id,
+//     })
+//     const savedCampground = await campground.save()
+//     user.campgrounds = user.campgrounds.concat(savedCampground._id)
+//     await user.save()
+//     res.json(savedCampground)
+//   })
+// )
 
 campgroundsRouter.delete(
   "/:id",

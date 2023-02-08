@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
 import Button from "react-bootstrap/esm/Button"
 import ReviewForm from "./ReviewForm"
+import "../stars.css"
 
 const CampgroundView = ({
   setNotificationMessage,
@@ -26,7 +27,6 @@ const CampgroundView = ({
   }, [])
   useEffect(() => {
     if (currentCamp) {
-      console.log("testiiii")
       setInitialReviews(currentCamp.reviews)
       console.log(currentCamp.reviews)
     }
@@ -78,7 +78,11 @@ const CampgroundView = ({
     <div className="row">
       <div className="col-6  p-2  my-5">
         <Card>
-          <Card.Img variant="top" src={currentCamp.image} />
+          {currentCamp.images.map((image) => (
+            <Card.Img variant="top" src={image.url} />
+          ))}
+          {/* <Card.Img variant="top" src={currentCamp.images[0].url} /> */}
+          {/* <Card.Img variant="top" src={currentCamp.image} /> */}
           <Card.Body>
             <Card.Title>{currentCamp.title}</Card.Title>
             <Card.Text>{currentCamp.description}</Card.Text>
@@ -108,31 +112,39 @@ const CampgroundView = ({
         </Card>
       </div>
       <div className="col-6  p-2 px-1 my-5">
-        {userHasReviews(user) === true ? (
-          <h2>Reviews</h2>
+        {user !== null ? (
+          userHasReviews(user) === true ? (
+            <h2>Reviews</h2>
+          ) : (
+            <ReviewForm
+              camp={currentCamp}
+              setNotificationMessage={setNotificationMessage}
+              setNotificationVariant={setNotificationVariant}
+            />
+          )
         ) : (
-          <ReviewForm
-            camp={currentCamp}
-            setNotificationMessage={setNotificationMessage}
-            setNotificationVariant={setNotificationVariant}
-          />
+          <h2>Reviews</h2>
         )}
 
         <div>
           {currentCamp.reviews.map((review) => (
             <Card className="my-3" key={review.id}>
               <Card.Body>
-                <Card.Text>Rating: {review.rating}</Card.Text>
+                <Card.Title>
+                  {review.user !== undefined ? review.user.username : ""}
+                </Card.Title>
+                {/* <Card.Text>Rating: {review.rating}</Card.Text> */}
+                <p className="starability-result" data-rating={review.rating}>
+                  Rated: {review.rating} stars
+                </p>
+
                 <Card.Text>{review.body}</Card.Text>
-                <Card.Footer className="text-muted">
-                  By {review.user !== undefined ? review.user.username : ""}
-                </Card.Footer>
                 {user !== null && user.username === review.user.username ? (
                   <Button
                     variant="danger"
                     onClick={() => handleDeleteReview(review.id)}
                   >
-                    DELETE Review!
+                    Delete review
                   </Button>
                 ) : (
                   ""
