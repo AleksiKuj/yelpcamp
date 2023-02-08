@@ -6,6 +6,7 @@ const { campgroundSchema } = require("../utils/validationSchemas")
 const jwt = require("jsonwebtoken")
 const multer = require("multer")
 const { storage } = require("../cloudinary")
+const { cloudinary } = require("../cloudinary")
 const upload = multer({ storage })
 const config = require("../utils/config")
 
@@ -49,10 +50,33 @@ campgroundsRouter.get(
 
 campgroundsRouter.put(
   "/:id",
+  upload.array("file"),
   catchAsync(async (req, res) => {
-    const campground = req.body
-    await Campground.findByIdAndUpdate(req.params.id, campground)
-    res.json(campground)
+    const body = req.body
+    //console.log(body)
+    const campground = await Campground.findByIdAndUpdate(req.params.id, {
+      title: body.title,
+      description: body.description,
+      location: body.location,
+      price: body.price,
+    })
+    console.log("deleteimages", body.deleteImages.split(","))
+    const images = req.files.map((f) => ({ url: f.path, filename: f.filename }))
+    campground.images.push(...images)
+
+    //delete image by turning body.deleteImages into an array
+    // also destroys it from cloudinary
+    if (body.deleteImages) {
+      for (let filename of body.deleteImages.split(",")) {
+        await cloudinary.uploader.destroy(filename)
+      }
+      await campground.updateOne({
+        $pull: { images: { filename: { $in: body.deleteImages.split(",") } } },
+      })
+      console.log(campground)
+    }
+
+    await campground.save()
   })
 )
 
@@ -63,61 +87,29 @@ const getTokenFrom = (request) => {
   }
 }
 
-campgroundsRouter.post(
-  "/",
+campgroundsRouter.post("/", upload.array("file"), async (req, res) => {
+  const body = req.body
+  const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
+  const user = await User.findById(decodedToken.id)
 
-  upload.array("file"),
-  async (req, res) => {
-    const body = req.body
-    const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
-    const user = await User.findById(decodedToken.id)
+  console.log(req.files)
+  const campground = new Campground({
+    title: body.title,
+    description: body.description,
+    location: body.location,
+    price: body.price,
+    user: user._id,
+  })
+  campground.images = req.files.map((f) => ({
+    url: f.path,
+    filename: f.filename,
+  }))
 
-    console.log(JSON.stringify(body))
-    const campground = new Campground({
-      title: body.title,
-      description: body.description,
-      location: body.location,
-      price: body.price,
-      user: user._id,
-    })
-    campground.images = req.files.map((f) => ({
-      url: f.path,
-      filename: f.filename,
-    }))
-    const savedCampground = await campground.save()
-    user.campgrounds = user.campgrounds.concat(savedCampground._id)
-    await user.save()
-    res.json(savedCampground)
-
-    // res.send({ message: "File uploaded successfully" })
-  }
-)
-
-// campgroundsRouter.post(
-//   "/",
-//   validateCampground,
-//   catchAsync(async (req, res) => {
-//     const body = req.body
-//     const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
-//     if (!decodedToken.id) {
-//       return response.status(401).json({ error: "token invalid" })
-//     }
-//     const user = await User.findById(decodedToken.id)
-
-//     const campground = new Campground({
-//       title: body.title,
-//       description: body.description,
-//       location: body.location,
-//       image: body.image,
-//       price: body.price,
-//       user: user._id,
-//     })
-//     const savedCampground = await campground.save()
-//     user.campgrounds = user.campgrounds.concat(savedCampground._id)
-//     await user.save()
-//     res.json(savedCampground)
-//   })
-// )
+  const savedCampground = await campground.save()
+  user.campgrounds = user.campgrounds.concat(savedCampground._id)
+  await user.save()
+  res.json(savedCampground)
+})
 
 campgroundsRouter.delete(
   "/:id",

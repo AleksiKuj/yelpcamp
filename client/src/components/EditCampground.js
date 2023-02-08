@@ -5,6 +5,7 @@ import campgroundService from "../services/campgrounds"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
+import Image from "react-bootstrap/Image"
 
 const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [currentCamp, setCurrentCamp] = useState()
@@ -16,14 +17,41 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [description, setDescription] = useState("")
   const [image, setImage] = useState("")
   const [price, setPrice] = useState("")
+  const [file, setFile] = useState(null)
+  const [deleteImages, setDeleteImages] = useState([])
   const navigate = useNavigate()
   useEffect(() => {
     campgroundService
       .getOne(match.params.id)
       .then((camp) => setCurrentCamp(camp))
-
-    console.log(match)
   }, [])
+
+  useEffect(() => {
+    const setFields = () => {
+      if (currentCamp) {
+        setTitle(currentCamp.title)
+        setPrice(currentCamp.price)
+        setLocation(currentCamp.location)
+        setDescription(currentCamp.description)
+        console.log("curcamp", currentCamp)
+      }
+    }
+    setFields()
+  }, [currentCamp])
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target
+
+    if (checked) {
+      setDeleteImages([...deleteImages, value])
+    } else {
+      setDeleteImages(deleteImages.filter((img) => img !== value))
+    }
+  }
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files)
+  }
 
   const handleSubmit = (e) => {
     const form = e.currentTarget
@@ -44,14 +72,29 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       price,
     }
     if (form.checkValidity()) {
-      campgroundService.edit(id, campground)
+      let formData = new FormData()
+      if (file) {
+        for (let i = 0; i < file.length; i++) {
+          formData.append("file", file[i])
+        }
+      }
+
+      // formData.append("file", file)
+      formData.append("title", title)
+      formData.append("location", location)
+      formData.append("description", description)
+      formData.append("price", price)
+      formData.append("deleteImages", deleteImages)
+
+      campgroundService.edit(id, formData)
+      console.log(formData)
 
       setNotificationVariant("success")
       setNotificationMessage(`Succesfully edited ${campground.title}`)
       setTimeout(() => {
         setNotificationMessage("")
       }, 5000)
-      navigate("/campgrounds")
+      navigate(`/campgrounds/${currentCamp.id}`)
     }
   }
   if (!currentCamp) {
@@ -59,7 +102,6 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   }
   return (
     <div>
-      <h1>edit campground</h1>
       <h1>{currentCamp.title}</h1>
       <h2>{currentCamp.location}</h2>
       <Link to={`/campgrounds/${match.params.id}`}>Back</Link>
@@ -69,7 +111,8 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
           <Form.Control
             required
             type="text"
-            placeholder={currentCamp.title}
+            // placeholder={currentCamp.title}
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -83,6 +126,7 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
           <Form.Control
             required
             type="text"
+            value={location}
             placeholder={currentCamp.location}
             onChange={(e) => setLocation(e.target.value)}
           />
@@ -92,25 +136,21 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Image url</Form.Label>
+        <Form.Label>Add images</Form.Label>
+        <Form.Group controlId="formFileMultiple" className="mb-3">
           <Form.Control
-            required
-            type="text"
-            placeholder={currentCamp.image}
-            onChange={(e) => setImage(e.target.value)}
+            type="file"
+            name="file"
+            multiple
+            onChange={handleFileChange}
           />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid url.
-          </Form.Control.Feedback>
         </Form.Group>
-
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
           <Form.Control
             required
             as="textarea"
+            value={description}
             placeholder={currentCamp.description}
             rows={3}
             onChange={(e) => setDescription(e.target.value)}
@@ -128,6 +168,7 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
             <Form.Control
               required
               type="number"
+              value={price}
               min={0}
               placeholder={currentCamp.price}
               aria-describedby="price-label"
@@ -140,25 +181,29 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
           </InputGroup>
         </Form.Group>
 
+        <div className="mb-3">
+          {currentCamp.images.map((image) => (
+            <div key={image.filename}>
+              <Image
+                src={`https://res.cloudinary.com/dvl3hqoba/image/upload/w_200/${image.filename}`}
+                thumbnail={"true"}
+              />
+              <Form.Check
+                type={"checkbox"}
+                id={`image-${image.filename}`}
+                label="Delete?"
+                name="deleteImages[]"
+                value={image.filename}
+                onChange={handleCheckboxChange}
+              />
+            </div>
+          ))}
+        </div>
+
         <Button variant="success" type="submit">
           Submit
         </Button>
       </Form>
-      {/* <form onSubmit={handleSubmit}>
-        Title
-        <input
-          type="text"
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder={currentCamp.title}
-        />
-        Location
-        <input
-          type="text"
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder={currentCamp.location}
-        />
-        <button type="submit">edit</button>
-      </form> */}
     </div>
   )
 }

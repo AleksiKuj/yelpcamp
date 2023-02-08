@@ -16,7 +16,7 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const navigate = useNavigate()
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0])
+    setFile(e.target.files)
   }
 
   const handleSubmit = (e) => {
@@ -37,7 +37,10 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
     }
     if (form.checkValidity()) {
       let formData = new FormData()
-      formData.append("file", file)
+      for (let i = 0; i < file.length; i++) {
+        formData.append("file", file[i])
+      }
+      // formData.append("file", file)
       formData.append("title", title)
       formData.append("location", location)
       formData.append("description", description)
@@ -90,30 +93,15 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <input type="file" name="file" onChange={handleFileChange} />
-
-        {/* <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>Image</Form.Label>
+        <Form.Label>Add images</Form.Label>
+        <Form.Group controlId="formFileMultiple" className="mb-3">
           <Form.Control
             type="file"
-            // onChange={(e) => setImage(e.target.files[0])}
-            onChange={(e) => setImage(e.target.files[0])}
+            name="file"
+            multiple
+            onChange={handleFileChange}
           />
-        </Form.Group> */}
-
-        {/* <Form.Group className="mb-3">
-          <Form.Label>Image url</Form.Label>
-          <Form.Control
-            type="text"
-            required
-            onChange={(e) => setImage(e.target.value)}
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid url.
-          </Form.Control.Feedback>
-        </Form.Group> */}
-
+        </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
           <Form.Control

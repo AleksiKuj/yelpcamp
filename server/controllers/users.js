@@ -19,24 +19,6 @@ const validateUser = (req, res, next) => {
   }
 }
 
-// usersRouter.post(
-//   "/register",
-//   validateUser,
-//   catchAsync(async (req, res) => {
-//     try {
-//       const { email, username, password } = req.body
-//       const user = new User({ email, username })
-//       const newUser = await User.register(user, password)
-//       res.json(newUser)
-//     } catch (e) {
-//       console.log(e.message)
-//       if (e.code === 11000) {
-//         return res.status(400).send("Email already exists")
-//       }
-//       return res.status(400).send(e.message)
-//     }
-//   })
-// )
 usersRouter.post(
   "/register",
   validateUser,

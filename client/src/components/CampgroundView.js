@@ -1,11 +1,12 @@
 import { useMatch, useParams, Link, useNavigate } from "react-router-dom"
-import { useState, useEffect, useReducer } from "react"
+import { useState, useEffect } from "react"
 import campgroundService from "../services/campgrounds"
 import reviewService from "../services/reviews"
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
 import Button from "react-bootstrap/esm/Button"
 import ReviewForm from "./ReviewForm"
+import Carousel from "react-bootstrap/Carousel"
 import "../stars.css"
 
 const CampgroundView = ({
@@ -78,9 +79,20 @@ const CampgroundView = ({
     <div className="row">
       <div className="col-6  p-2  my-5">
         <Card>
-          {currentCamp.images.map((image) => (
+          <Carousel>
+            {currentCamp.images.map((image) => (
+              <Carousel.Item key={image.filename}>
+                <img
+                  className="d-block w-100"
+                  src={image.url}
+                  alt={currentCamp.title}
+                />
+              </Carousel.Item>
+            ))}
+          </Carousel>
+          {/* {currentCamp.images.map((image) => (
             <Card.Img variant="top" src={image.url} />
-          ))}
+          ))} */}
           {/* <Card.Img variant="top" src={currentCamp.images[0].url} /> */}
           {/* <Card.Img variant="top" src={currentCamp.image} /> */}
           <Card.Body>
