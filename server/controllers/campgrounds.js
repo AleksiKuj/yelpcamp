@@ -9,6 +9,8 @@ const { storage } = require("../cloudinary")
 const { cloudinary } = require("../cloudinary")
 const upload = multer({ storage })
 const config = require("../utils/config")
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding")
+const geocoder = mbxGeocoding({ accessToken: config.MAPBOX_TOKEN })
 
 const validateCampground = (req, res, next) => {
   //joi campgroundSchema
@@ -53,12 +55,21 @@ campgroundsRouter.put(
   upload.array("file"),
   catchAsync(async (req, res) => {
     const body = req.body
-    //console.log(body)
+    const geoData = await geocoder
+      .forwardGeocode({
+        query: body.location,
+        limit: 1,
+      })
+      .send()
+    console.log(geoData.body.features[0].geometry)
+    res.send("OK!")
+
     const campground = await Campground.findByIdAndUpdate(req.params.id, {
       title: body.title,
       description: body.description,
       location: body.location,
       price: body.price,
+      geometry: geoData.body.features[0].geometry,
     })
     console.log("deleteimages", body.deleteImages.split(","))
     const images = req.files.map((f) => ({ url: f.path, filename: f.filename }))
@@ -89,9 +100,17 @@ const getTokenFrom = (request) => {
 
 campgroundsRouter.post("/", upload.array("file"), async (req, res) => {
   const body = req.body
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: body.location,
+      limit: 1,
+    })
+    .send()
+  console.log(geoData.body.features[0].geometry)
+  res.send("OK!")
+
   const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
   const user = await User.findById(decodedToken.id)
-
   console.log(req.files)
   const campground = new Campground({
     title: body.title,
@@ -99,16 +118,17 @@ campgroundsRouter.post("/", upload.array("file"), async (req, res) => {
     location: body.location,
     price: body.price,
     user: user._id,
+    geometry: geoData.body.features[0].geometry,
   })
   campground.images = req.files.map((f) => ({
     url: f.path,
     filename: f.filename,
   }))
-
   const savedCampground = await campground.save()
   user.campgrounds = user.campgrounds.concat(savedCampground._id)
   await user.save()
-  res.json(savedCampground)
+  console.log(campground)
+  // res.json(savedCampground)
 })
 
 campgroundsRouter.delete(

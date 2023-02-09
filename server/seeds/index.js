@@ -33,11 +33,15 @@ const seedDB = async () => {
           _id: "63e3c78f87d9d3146aa936d9",
         },
         {
-          url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1675873293/YelpCamp/ez5pwdxqpcg2dgxhxip6.jpg",
-          filename: "YelpCamp/ez5pwdxqpcg2dgxhxip6.jpg",
+          url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1675889013/YelpCamp/xsefbopyiibdzmxj5xvu.jpg",
+          filename: "YelpCamp/xsefbopyiibdzmxj5xvu.jpg",
           _id: "63e3c78f87d9d3146aa936d9",
         },
       ],
+      geometry: {
+        type: "Point",
+        coordinates: [18.071093, 59.325117],
+      },
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores dolore officia aliquid veritatis animi et excepturi delectus nesciunt eos ratione ut consequatur nisi quo consectetur architecto, eius sed. Magni, nisi.",
       price,

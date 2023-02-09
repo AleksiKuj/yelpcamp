@@ -90,10 +90,12 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       console.log(formData)
 
       setNotificationVariant("success")
-      setNotificationMessage(`Succesfully edited ${campground.title}`)
+      setNotificationMessage(
+        `Succesfully edited ${campground.title}. It might take a few seconds for the data to update.`
+      )
       setTimeout(() => {
         setNotificationMessage("")
-      }, 5000)
+      }, 10000)
       navigate(`/campgrounds/${currentCamp.id}`)
     }
   }

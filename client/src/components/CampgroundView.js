@@ -1,5 +1,5 @@
 import { useMatch, useParams, Link, useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import campgroundService from "../services/campgrounds"
 import reviewService from "../services/reviews"
 import Card from "react-bootstrap/Card"
@@ -8,6 +8,8 @@ import Button from "react-bootstrap/esm/Button"
 import ReviewForm from "./ReviewForm"
 import Carousel from "react-bootstrap/Carousel"
 import "../stars.css"
+//import "mapbox-gl/dist/mapbox-gl.css"
+import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 
 const CampgroundView = ({
   setNotificationMessage,
@@ -21,6 +23,14 @@ const CampgroundView = ({
   const navigate = useNavigate()
   //const params = useParams()
 
+  const mapContainer = useRef(null)
+  const map = useRef(null)
+  const [lng, setLng] = useState(-70.9)
+  const [lat, setLat] = useState(42.35)
+  const [zoom, setZoom] = useState(12)
+
+  mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
+
   useEffect(() => {
     campgroundService
       .getOne(match.params.id)
@@ -30,8 +40,26 @@ const CampgroundView = ({
     if (currentCamp) {
       setInitialReviews(currentCamp.reviews)
       console.log(currentCamp.reviews)
+      setLng(currentCamp.geometry.coordinates[0])
+      setLat(currentCamp.geometry.coordinates[1])
     }
   }, [currentCamp])
+
+  useEffect(() => {
+    if (map.current) return // initialize map only once
+    setTimeout(() => {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/outdoors-v12",
+        center: [lng, lat],
+        zoom: zoom,
+      })
+      new mapboxgl.Marker({ color: "red" })
+        .setLngLat([lng, lat])
+        .addTo(map.current)
+    }, 150)
+  })
+
   const handleDelete = () => {
     campgroundService.deleteCamp(match.params.id)
     setNotificationVariant("danger")
@@ -79,6 +107,7 @@ const CampgroundView = ({
     <div className="row">
       <div className="col-6  p-2  my-5">
         <Card>
+          <div ref={mapContainer} className="map-container" />
           <Carousel>
             {currentCamp.images.map((image) => (
               <Carousel.Item key={image.filename}>
