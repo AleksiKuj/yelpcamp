@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import campgroundService from "../services/campgrounds"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
+import ClusterMap from "./ClusterMap"
 
 const Campgrounds = () => {
   const [campgrounds, setCampgrounds] = useState([])
@@ -15,6 +16,7 @@ const Campgrounds = () => {
 
   return (
     <div>
+      <ClusterMap campgrounds={campgrounds} />
       <h1>ALL Campgrounds!</h1>
       <ul>
         {campgrounds.map((campground) => (

@@ -25,7 +25,10 @@ const validateCampground = (req, res, next) => {
 campgroundsRouter.get(
   "/",
   catchAsync(async (req, res) => {
-    const campgrounds = await Campground.find({}).populate("user")
+    const campgrounds = await Campground.find({}).populate({
+      path: "user",
+      select: "username",
+    })
     res.json(campgrounds)
   })
 )

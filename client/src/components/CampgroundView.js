@@ -42,6 +42,7 @@ const CampgroundView = ({
       console.log(currentCamp.reviews)
       setLng(currentCamp.geometry.coordinates[0])
       setLat(currentCamp.geometry.coordinates[1])
+      console.log(currentCamp)
     }
   }, [currentCamp])
 
@@ -57,7 +58,7 @@ const CampgroundView = ({
       new mapboxgl.Marker({ color: "red" })
         .setLngLat([lng, lat])
         .addTo(map.current)
-    }, 150)
+    }, 200)
   })
 
   const handleDelete = () => {
@@ -126,6 +127,7 @@ const CampgroundView = ({
           {/* <Card.Img variant="top" src={currentCamp.image} /> */}
           <Card.Body>
             <Card.Title>{currentCamp.title}</Card.Title>
+            <Card.Title>{currentCamp.test}</Card.Title>
             <Card.Text>{currentCamp.description}</Card.Text>
           </Card.Body>
           <ListGroup className="list-group-flush">
