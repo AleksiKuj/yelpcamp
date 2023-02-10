@@ -42,6 +42,7 @@ const CampgroundView = ({
       setLng(currentCamp.geometry.coordinates[0])
       setLat(currentCamp.geometry.coordinates[1])
       document.title = `YelpCamp: ${currentCamp.title}`
+      console.log(currentCamp.reviews)
     }
   }, [currentCamp])
 
@@ -109,6 +110,14 @@ const CampgroundView = ({
     }
   }
 
+  const averageRating = () => {
+    let sum = 0
+    for (let i = 0; i < initialReviews.length; i++) {
+      sum += initialReviews[i].rating
+    }
+    return sum / initialReviews.length
+  }
+
   return (
     // CHANGE FROM GRID TO FLEX -> flex-row -> on mobile flex-col
     <div className="bg-light h-100 " style={{ minHeight: "92vh" }}>
@@ -137,13 +146,25 @@ const CampgroundView = ({
               </Carousel>
 
               <Card.Body>
-                <Card.Title>{currentCamp.title}</Card.Title>
-                <Card.Title>{currentCamp.test}</Card.Title>
+                <Card.Title>{currentCamp.title} </Card.Title>
+                <Card.Title>
+                  <p
+                    className="starability-result"
+                    data-rating={averageRating()}
+                  >
+                    A Rated: {averageRating()} stars
+                  </p>{" "}
+                </Card.Title>
+
                 <Card.Text>{currentCamp.description}</Card.Text>
               </Card.Body>
               <ListGroup className="list-group-flush">
                 <ListGroup.Item>{currentCamp.location}</ListGroup.Item>
                 <ListGroup.Item>{currentCamp.price}€/night</ListGroup.Item>
+                <ListGroup.Item>
+                  {averageRating()} rating average with {initialReviews.length}{" "}
+                  reviews
+                </ListGroup.Item>
                 <ListGroup.Item>
                   Added by {currentCamp.user.username}
                 </ListGroup.Item>

@@ -4,6 +4,7 @@ import campgroundService from "../services/campgrounds"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import ClusterMap from "./ClusterMap"
+import "../stars.css"
 
 const Campgrounds = () => {
   const [campgrounds, setCampgrounds] = useState([])
@@ -13,6 +14,14 @@ const Campgrounds = () => {
       .getAll()
       .then((campgrounds) => setCampgrounds(campgrounds))
   }, [campgrounds.length])
+
+  const averageRating = (array) => {
+    let sum = 0
+    for (let i = 0; i < array.length; i++) {
+      sum += array[i].rating
+    }
+    return sum / array.length
+  }
 
   return (
     <div className="bg-light h-100 ">
@@ -31,6 +40,14 @@ const Campgrounds = () => {
 
               <Card.Body>
                 <Card.Title>{campground.title}</Card.Title>
+                <Card.Text>
+                  <p
+                    className="starability-result"
+                    data-rating={averageRating(campground.reviews)}
+                  >
+                    A Rated: {averageRating(campground.reviews)} stars
+                  </p>
+                </Card.Text>
                 <Card.Text>{campground.description}</Card.Text>
                 <Card.Text className="text-muted">
                   {campground.location}
