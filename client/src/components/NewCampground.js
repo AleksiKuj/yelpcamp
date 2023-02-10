@@ -4,6 +4,7 @@ import campgroundService from "../services/campgrounds"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
+import Card from "react-bootstrap/Card"
 
 const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [validated, setValidated] = useState(false)
@@ -54,92 +55,100 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       setTimeout(() => {
         setNotificationMessage("")
       }, 5000)
-
-      //navigate("/campgrounds")
+      setTimeout(() => {
+        navigate("/campgrounds")
+      }, 500)
+      //
     }
   }
   return (
-    <div>
-      <h1 className="text-center">New campground</h1>
-      <Form
-        onSubmit={handleSubmit}
-        noValidate
-        validated={validated}
-        encType="multipart/form-data"
-      >
-        <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
-            type="text"
-            required
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid title.
-          </Form.Control.Feedback>
-        </Form.Group>
+    <div className="bg-light h-100 ">
+      <div className="d-flex container justify-content-center mt-5 mb-5">
+        <Card style={{ width: "24rem" }} className="mt-5">
+          <Card.Body>
+            <Card.Title>New Campground</Card.Title>
+            <Form
+              onSubmit={handleSubmit}
+              noValidate
+              validated={validated}
+              encType="multipart/form-data"
+            >
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  required
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid title.
+                </Form.Control.Feedback>
+              </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Location</Form.Label>
-          <Form.Control
-            type="text"
-            required
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid location.
-          </Form.Control.Feedback>
-        </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  required
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid location.
+                </Form.Control.Feedback>
+              </Form.Group>
 
-        <Form.Label>Add images</Form.Label>
-        <Form.Group controlId="formFileMultiple" className="mb-3">
-          <Form.Control
-            type="file"
-            name="file"
-            multiple
-            onChange={handleFileChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            required
-            as="textarea"
-            rows={3}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid description.
-          </Form.Control.Feedback>
-        </Form.Group>
+              <Form.Label>Add images</Form.Label>
+              <Form.Group controlId="formFileMultiple" className="mb-3">
+                <Form.Control
+                  type="file"
+                  name="file"
+                  multiple
+                  onChange={handleFileChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  required
+                  as="textarea"
+                  rows={3}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid description.
+                </Form.Control.Feedback>
+              </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Campground price / night</Form.Label>
-          <InputGroup>
-            <InputGroup.Text id="price-label">€</InputGroup.Text>
-            <Form.Control
-              type="number"
-              min={0}
-              step={0.01}
-              required
-              placeholder="0.00"
-              aria-describedby="price-label"
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid price.
-            </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Campground price / night</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text id="price-label">€</InputGroup.Text>
+                  <Form.Control
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    required
+                    placeholder="0.00"
+                    aria-describedby="price-label"
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a valid price.
+                  </Form.Control.Feedback>
+                </InputGroup>
+              </Form.Group>
 
-        <Button variant="success" type="submit">
-          Submit
-        </Button>
-      </Form>
+              <Button variant="success" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </div>
     </div>
   )
 }

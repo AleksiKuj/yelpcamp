@@ -15,17 +15,18 @@ const Campgrounds = () => {
   }, [campgrounds.length])
 
   return (
-    <div>
-      <ClusterMap campgrounds={campgrounds} />
-      <h1>ALL Campgrounds!</h1>
-      <ul>
+    <div className="bg-light h-100 ">
+      <div className="container mt-5 mb-5">
+        <ClusterMap campgrounds={campgrounds} />
+        <h1 className="text-center">All campgrounds</h1>
+
         {campgrounds.map((campground) => (
-          <div key={campground.id}>
+          <div key={campground.id} className="py-2">
             <Card style={{}} className="d-flex flex-row">
               <Card.Img
                 variant="top"
                 src={`${campground.images[0].url}`}
-                // style={{ width: "350px", height: "250px" }}
+                style={{ width: "350px", height: "250px" }}
               />
 
               <Card.Body>
@@ -41,7 +42,7 @@ const Campgrounds = () => {
             </Card>
           </div>
         ))}
-      </ul>
+      </div>
     </div>
   )
 }

@@ -30,7 +30,7 @@ function App() {
   }, [])
 
   return (
-    <div className=" d-flex flex-column vh-100">
+    <div className=" d-flex flex-column vh-100 bg-dark">
       <Router>
         <NavMenu user={user} />
         <Notification
@@ -38,9 +38,10 @@ function App() {
           variant={notificationVariant}
         />
 
-        <div className="container mt-5">
+        <div className=" vh-100 ">
           <Routes>
             <Route path="/" element={<Home />}></Route>
+
             <Route path="/campgrounds" element={<Campgrounds />}></Route>
             <Route
               path="/campgrounds/new"

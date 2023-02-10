@@ -17,29 +17,47 @@ mongoose
   })
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)]
-
+const imageList = [
+  {
+    url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1676024265/YelpCamp/ybgedgtnitpzkdakhivg.jpg",
+    filename: "YelpCamp/ybgedgtnitpzkdakhivg",
+    id: "",
+  },
+  {
+    url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1676024265/YelpCamp/lszwgkp8auttgslmsdmh.jpg",
+    filename: "YelpCamp/lszwgkp8auttgslmsdmh",
+    id: "",
+  },
+  {
+    url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1676024265/YelpCamp/kmcwjttpeq0am8ggcbzw.jpg",
+    filename: "YelpCamp/kmcwjttpeq0am8ggcbzw",
+    id: "",
+  },
+  {
+    url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1676024265/YelpCamp/yomwjjnltczxiijsxoid.jpg",
+    filename: "YelpCamp/yomwjjnltczxiijsxoid",
+    id: "",
+  },
+  {
+    url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1676024265/YelpCamp/k7yrxahvztpye5lsd6mx.jpg",
+    filename: "k7yrxahvztpye5lsd6mx",
+    id: "",
+  },
+]
 const seedDB = async () => {
   await Campground.deleteMany({})
   await Review.deleteMany({})
+
   for (let i = 0; i < 200; i++) {
+    const randomImg = Math.floor(Math.random() * imageList.length)
+    const randomImg2 = Math.floor(Math.random() * imageList.length)
     const random1000 = Math.floor(Math.random() * 1000)
     const price = Math.floor(Math.random() * 20) + 10
     const camp = new Campground({
       user: "63e370cb9d4242dd4c4c6030",
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
-      images: [
-        {
-          url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1675872143/YelpCamp/wxaswb8c2jhfkfy3d95g.jpg",
-          filename: "YelpCamp/wxaswb8c2jhfkfy3d95g",
-          _id: "63e3c78f87d9d3146aa936d9",
-        },
-        {
-          url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1675889013/YelpCamp/xsefbopyiibdzmxj5xvu.jpg",
-          filename: "YelpCamp/xsefbopyiibdzmxj5xvu.jpg",
-          _id: "63e3c78f87d9d3146aa936d9",
-        },
-      ],
+      images: [imageList[randomImg], imageList[randomImg2]],
       geometry: {
         type: "Point",
         coordinates: [

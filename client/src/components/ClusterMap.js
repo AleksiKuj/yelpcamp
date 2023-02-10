@@ -31,6 +31,7 @@ const ClusterMap = ({ campgrounds }) => {
           center: [-103.5917, 40.6699],
           zoom: 3,
         })
+        map.current.addControl(new mapboxgl.NavigationControl())
 
         //add "properties" to each campground for geojson parsing
         let newCampgrounds = campgrounds.map(function (ele) {
@@ -164,7 +165,6 @@ const ClusterMap = ({ campgrounds }) => {
 
   return (
     <div>
-      <h1>cluster</h1>
       <div ref={mapContainer} className="map-container" style={mapStyle} />
     </div>
   )

@@ -55,10 +55,12 @@ const CampgroundView = ({
         center: [lng, lat],
         zoom: zoom,
       })
+      //add controls(zoom and rotation)
+      map.current.addControl(new mapboxgl.NavigationControl())
       new mapboxgl.Marker({ color: "red" })
         .setLngLat([lng, lat])
         .addTo(map.current)
-    }, 200)
+    }, 250)
   })
 
   const handleDelete = () => {
@@ -105,96 +107,109 @@ const CampgroundView = ({
 
   return (
     // CHANGE FROM GRID TO FLEX -> flex-row -> on mobile flex-col
-    <div className="row">
-      <div className="col-6  p-2  my-5">
-        <Card>
-          <div ref={mapContainer} className="map-container" />
-          <Carousel>
-            {currentCamp.images.map((image) => (
-              <Carousel.Item key={image.filename}>
-                <img
-                  className="d-block w-100"
-                  src={image.url}
-                  alt={currentCamp.title}
-                />
-              </Carousel.Item>
-            ))}
-          </Carousel>
-          {/* {currentCamp.images.map((image) => (
+    <div className="bg-light h-100 ">
+      <div className="container mt-5 mb-5">
+        <div className="row">
+          <div className="col-6  p-2  my-5">
+            <Card>
+              <Carousel>
+                {currentCamp.images.map((image) => (
+                  <Carousel.Item key={image.filename}>
+                    <img
+                      className="d-block w-100"
+                      style={{
+                        maxWidth: "100%",
+                        width: "50px",
+                        height: "350px",
+                        objectFit: "cover",
+                      }}
+                      src={image.url}
+                      alt={currentCamp.title}
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+              {/* {currentCamp.images.map((image) => (
             <Card.Img variant="top" src={image.url} />
           ))} */}
-          {/* <Card.Img variant="top" src={currentCamp.images[0].url} /> */}
-          {/* <Card.Img variant="top" src={currentCamp.image} /> */}
-          <Card.Body>
-            <Card.Title>{currentCamp.title}</Card.Title>
-            <Card.Title>{currentCamp.test}</Card.Title>
-            <Card.Text>{currentCamp.description}</Card.Text>
-          </Card.Body>
-          <ListGroup className="list-group-flush">
-            <ListGroup.Item>{currentCamp.location}</ListGroup.Item>
-            <ListGroup.Item>{currentCamp.price}€/night</ListGroup.Item>
-            <ListGroup.Item>
-              Added by {currentCamp.user.username}
-            </ListGroup.Item>
-          </ListGroup>
-          {user !== null && user.username === currentCamp.user.username ? (
-            <Card.Body>
-              <Link to="edit" className="mx-1">
-                <Button variant="success">Edit</Button>
-              </Link>
-
-              <Button variant="danger" onClick={() => handleDelete()}>
-                DELETE CAMP!
-              </Button>
-            </Card.Body>
-          ) : (
-            ""
-          )}
-
-          <Card.Footer className="text-muted">2 days ago</Card.Footer>
-        </Card>
-      </div>
-      <div className="col-6  p-2 px-1 my-5">
-        {user !== null ? (
-          userHasReviews(user) === true ? (
-            <h2>Reviews</h2>
-          ) : (
-            <ReviewForm
-              camp={currentCamp}
-              setNotificationMessage={setNotificationMessage}
-              setNotificationVariant={setNotificationVariant}
-            />
-          )
-        ) : (
-          <h2>Reviews</h2>
-        )}
-
-        <div>
-          {currentCamp.reviews.map((review) => (
-            <Card className="my-3" key={review.id}>
+              {/* <Card.Img variant="top" src={currentCamp.images[0].url} /> */}
+              {/* <Card.Img variant="top" src={currentCamp.image} /> */}
               <Card.Body>
-                <Card.Title>
-                  {review.user !== undefined ? review.user.username : ""}
-                </Card.Title>
-                {/* <Card.Text>Rating: {review.rating}</Card.Text> */}
-                <p className="starability-result" data-rating={review.rating}>
-                  Rated: {review.rating} stars
-                </p>
-
-                <Card.Text>{review.body}</Card.Text>
-                {user !== null && user.username === review.user.username ? (
-                  <Button
-                    variant="danger"
-                    onClick={() => handleDeleteReview(review.id)}
-                  >
-                    Delete review
-                  </Button>
-                ) : (
-                  ""
-                )}
+                <Card.Title>{currentCamp.title}</Card.Title>
+                <Card.Title>{currentCamp.test}</Card.Title>
+                <Card.Text>{currentCamp.description}</Card.Text>
               </Card.Body>
+              <ListGroup className="list-group-flush">
+                <ListGroup.Item>{currentCamp.location}</ListGroup.Item>
+                <ListGroup.Item>{currentCamp.price}€/night</ListGroup.Item>
+                <ListGroup.Item>
+                  Added by {currentCamp.user.username}
+                </ListGroup.Item>
+              </ListGroup>
+              {user !== null && user.username === currentCamp.user.username ? (
+                <Card.Body>
+                  <Link to="edit" className="mx-1">
+                    <Button variant="success">Edit</Button>
+                  </Link>
+
+                  <Button variant="danger" onClick={() => handleDelete()}>
+                    DELETE CAMP!
+                  </Button>
+                </Card.Body>
+              ) : (
+                ""
+              )}
+
+              <Card.Footer className="text-muted">2 days ago</Card.Footer>
             </Card>
-          ))}
+          </div>
+          <div className="col-6  p-2 px-1 my-5">
+            <div ref={mapContainer} className="map-container" />
+            {user !== null ? (
+              userHasReviews(user) === true ? (
+                <h2>Reviews</h2>
+              ) : (
+                <ReviewForm
+                  camp={currentCamp}
+                  setNotificationMessage={setNotificationMessage}
+                  setNotificationVariant={setNotificationVariant}
+                />
+              )
+            ) : (
+              <h2>Reviews</h2>
+            )}
+
+            <div>
+              {currentCamp.reviews.map((review) => (
+                <Card className="my-3" key={review.id}>
+                  <Card.Body>
+                    <Card.Title>
+                      {review.user !== undefined ? review.user.username : ""}
+                    </Card.Title>
+                    {/* <Card.Text>Rating: {review.rating}</Card.Text> */}
+                    <p
+                      className="starability-result"
+                      data-rating={review.rating}
+                    >
+                      Rated: {review.rating} stars
+                    </p>
+
+                    <Card.Text>{review.body}</Card.Text>
+                    {user !== null && user.username === review.user.username ? (
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteReview(review.id)}
+                      >
+                        Delete review
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
