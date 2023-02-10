@@ -14,11 +14,15 @@ const Login = ({
   setUser,
   user,
 }) => {
-  const [validated, setValidated] = useState(false)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user) {
+      navigate("/")
+    }
+  })
 
   const handleLogin = async () => {
     try {
@@ -30,54 +34,33 @@ const Login = ({
       reviewsService.setToken(user.token)
       campgroundsService.setToken(user.token)
       setUser(user)
+      console.log("login success")
       window.localStorage.setItem("loggedUser", JSON.stringify(user))
+      setNotificationVariant("success")
+      setNotificationMessage(`Succesfully logged in as ${credentials.username}`)
+      setTimeout(() => {
+        setNotificationMessage("")
+      }, 5000)
+
+      navigate("/campgrounds")
     } catch (e) {
-      console.log("handlelogin e:", e.message)
+      setNotificationVariant("danger")
+      setNotificationMessage("Invalid username or password")
+      setTimeout(() => {
+        setNotificationMessage("")
+      }, 5000)
+
+      return e
     }
   }
 
   const handleSubmit = async (e) => {
-    const form = e.currentTarget
-    if (form.checkValidity() === false) {
-      e.preventDefault()
-      e.stopPropagation()
-      console.log("moi")
-    }
-
-    setValidated(true)
     e.preventDefault()
-
-    if (form.checkValidity()) {
-      try {
-        const credentials = {
-          username,
-          password,
-        }
-
-        handleLogin()
-
-        setNotificationVariant("success")
-        setNotificationMessage(
-          `Succesfully logged in as ${credentials.username}`
-        )
-        setTimeout(() => {
-          setNotificationMessage("")
-        }, 5000)
-
-        navigate("/campgrounds")
-      } catch (e) {
-        console.log("e:", e.message)
-        setNotificationVariant("danger")
-        setNotificationMessage(e.message)
-        setTimeout(() => {
-          setNotificationMessage("")
-        }, 5000)
-      }
-    }
+    await handleLogin()
   }
 
   return (
-    <div className="bg-light h-100 ">
+    <div className="bg-light h-100 " style={{ minHeight: "92vh" }}>
       <div className="container d-flex justify-content-center mt-5">
         <Card style={{ width: "18rem" }} className="mt-5">
           <Card.Img
@@ -86,31 +69,21 @@ const Login = ({
           />
           <Card.Body>
             <Card.Title>Login</Card.Title>
-            <Form onSubmit={handleSubmit} noValidate validated={validated}>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
                   type="text"
-                  required
                   onChange={(e) => setUsername(e.target.value)}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                <Form.Control.Feedback type="invalid">
-                  Please provide a valid username.
-                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                   type="password"
-                  required
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                <Form.Control.Feedback type="invalid">
-                  Please provide a valid password.
-                </Form.Control.Feedback>
               </Form.Group>
 
               <Button variant="success" type="submit" className="w-100">

@@ -51,7 +51,7 @@ const Register = ({ setNotificationMessage, setNotificationVariant }) => {
     }
   }
   return (
-    <div className="bg-light h-100 ">
+    <div className="bg-light h-100 " style={{ minHeight: "92vh" }}>
       <div className="container d-flex justify-content-center mt-5">
         <Card style={{ width: "18rem" }} className="mt-5">
           <Card.Img
@@ -65,6 +65,8 @@ const Register = ({ setNotificationMessage, setNotificationVariant }) => {
                 <Form.Label>Username</Form.Label>
                 <Form.Control
                   type="text"
+                  maxLength={30}
+                  minLength={3}
                   required
                   onChange={(e) => setUsername(e.target.value)}
                 />
@@ -92,6 +94,8 @@ const Register = ({ setNotificationMessage, setNotificationVariant }) => {
                 <Form.Control
                   type="password"
                   required
+                  maxLength={30}
+                  minLength={3}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>

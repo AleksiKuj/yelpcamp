@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
 import Image from "react-bootstrap/Image"
+import Card from "react-bootstrap/Card"
 
 const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [currentCamp, setCurrentCamp] = useState()
@@ -15,7 +16,6 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
   const [description, setDescription] = useState("")
-  const [image, setImage] = useState("")
   const [price, setPrice] = useState("")
   const [file, setFile] = useState(null)
   const [deleteImages, setDeleteImages] = useState([])
@@ -33,7 +33,6 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
         setPrice(currentCamp.price)
         setLocation(currentCamp.location)
         setDescription(currentCamp.description)
-        console.log("curcamp", currentCamp)
       }
     }
     setFields()
@@ -68,7 +67,6 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       title,
       location,
       description,
-      image,
       price,
     }
     if (form.checkValidity()) {
@@ -103,109 +101,118 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
     return null
   }
   return (
-    <div>
-      <h1>{currentCamp.title}</h1>
-      <h2>{currentCamp.location}</h2>
-      <Link to={`/campgrounds/${match.params.id}`}>Back</Link>
-      <Form onSubmit={handleSubmit} noValidate validated={validated}>
-        <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            // placeholder={currentCamp.title}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid title.
-          </Form.Control.Feedback>
-        </Form.Group>
+    <div className="bg-light h-100 " style={{ minHeight: "92vh" }}>
+      <div className="d-flex container justify-content-center mt-5 mb-5">
+        <Card style={{ width: "24rem" }} className="mt-5">
+          <Card.Body>
+            <Card.Title>New Campground</Card.Title>
+            <Link to={`/campgrounds/${match.params.id}`}>Back</Link>
+            <Form onSubmit={handleSubmit} noValidate validated={validated}>
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  minLength={5}
+                  maxLength={50}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid title.
+                </Form.Control.Feedback>
+              </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Location</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            value={location}
-            placeholder={currentCamp.location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid location.
-          </Form.Control.Feedback>
-        </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  required
+                  maxLength={50}
+                  type="text"
+                  value={location}
+                  placeholder={currentCamp.location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid location.
+                </Form.Control.Feedback>
+              </Form.Group>
 
-        <Form.Label>Add images</Form.Label>
-        <Form.Group controlId="formFileMultiple" className="mb-3">
-          <Form.Control
-            type="file"
-            name="file"
-            multiple
-            onChange={handleFileChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            required
-            as="textarea"
-            value={description}
-            placeholder={currentCamp.description}
-            rows={3}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid description.
-          </Form.Control.Feedback>
-        </Form.Group>
+              <Form.Label>Add images</Form.Label>
+              <Form.Group controlId="formFileMultiple" className="mb-3">
+                <Form.Control
+                  type="file"
+                  name="file"
+                  multiple
+                  onChange={handleFileChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  required
+                  maxLength={500}
+                  as="textarea"
+                  value={description}
+                  placeholder={currentCamp.description}
+                  rows={3}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid description.
+                </Form.Control.Feedback>
+              </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Campground price</Form.Label>
-          <InputGroup>
-            <InputGroup.Text id="price-label">€</InputGroup.Text>
-            <Form.Control
-              required
-              type="number"
-              value={price}
-              min={0}
-              placeholder={currentCamp.price}
-              aria-describedby="price-label"
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid price.
-            </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Campground price</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text id="price-label">€</InputGroup.Text>
+                  <Form.Control
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    value={price}
+                    required
+                    placeholder="0.00"
+                    aria-describedby="price-label"
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a valid price.
+                  </Form.Control.Feedback>
+                </InputGroup>
+              </Form.Group>
 
-        <div className="mb-3">
-          {currentCamp.images.map((image) => (
-            <div key={image.filename}>
-              <Image
-                src={`https://res.cloudinary.com/dvl3hqoba/image/upload/w_200/${image.filename}`}
-                thumbnail={"true"}
-              />
-              <Form.Check
-                type={"checkbox"}
-                id={`image-${image.filename}`}
-                label="Delete?"
-                name="deleteImages[]"
-                value={image.filename}
-                onChange={handleCheckboxChange}
-              />
-            </div>
-          ))}
-        </div>
+              <div className="mb-3">
+                {currentCamp.images.map((image) => (
+                  <div key={image.filename}>
+                    <Image
+                      src={`https://res.cloudinary.com/dvl3hqoba/image/upload/w_200/${image.filename}`}
+                      thumbnail={"true"}
+                    />
+                    <Form.Check
+                      type={"checkbox"}
+                      id={`image-${image.filename}`}
+                      label="Delete?"
+                      name="deleteImages[]"
+                      value={image.filename}
+                      onChange={handleCheckboxChange}
+                    />
+                  </div>
+                ))}
+              </div>
 
-        <Button variant="success" type="submit">
-          Submit
-        </Button>
-      </Form>
+              <Button variant="success" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </div>
     </div>
   )
 }

@@ -14,7 +14,7 @@ const ReviewForm = ({
   const [rating, setRating] = useState(3)
   const [validated, setValidated] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -28,9 +28,10 @@ const ReviewForm = ({
       rating,
     }
     if (form.checkValidity()) {
-      reviewService.addReview(camp.id, review)
+      await reviewService.addReview(camp.id, review)
       setNotificationVariant("success")
       setNotificationMessage(`Succesfully added ${rating} star review`)
+      window.location.reload(false)
       setTimeout(() => {
         setNotificationMessage("")
       }, 5000)
@@ -81,13 +82,15 @@ const ReviewForm = ({
           <InputGroup hasValidation>
             <Form.Control
               type="text"
+              minLength={5}
+              maxLength={500}
               required
               as="textarea"
               onChange={(e) => setReviewBody(e.target.value)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
-              Please enter a review.
+              Please enter a review with 5 charactes minimum.
             </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>

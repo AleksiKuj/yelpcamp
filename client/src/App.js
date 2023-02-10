@@ -30,7 +30,7 @@ function App() {
   }, [])
 
   return (
-    <div className=" d-flex flex-column vh-100 bg-dark">
+    <div className=" d-flex flex-column  bg-dark min-vh-100">
       <Router>
         <NavMenu user={user} />
         <Notification
@@ -38,7 +38,7 @@ function App() {
           variant={notificationVariant}
         />
 
-        <div className=" vh-100 ">
+        <div>
           <Routes>
             <Route path="/" element={<Home />}></Route>
 
@@ -49,6 +49,7 @@ function App() {
                 <NewCampground
                   setNotificationMessage={setNotificationMessage}
                   setNotificationVariant={setNotificationVariant}
+                  user={user}
                 />
               }
             ></Route>
@@ -87,7 +88,7 @@ function App() {
                   setNotificationMessage={setNotificationMessage}
                   setNotificationVariant={setNotificationVariant}
                   setUser={setUser}
-                  user={setUser}
+                  user={user}
                 />
               }
             ></Route>

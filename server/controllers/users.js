@@ -1,5 +1,4 @@
 const usersRouter = require("express").Router()
-const passport = require("passport")
 const User = require("../models/user")
 const catchAsync = require("../utils/catchAsync")
 const { userSchema } = require("../utils/validationSchemas")

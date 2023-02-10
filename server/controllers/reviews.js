@@ -6,7 +6,6 @@ const { reviewSchema } = require("../utils/validationSchemas")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 const config = require("../utils/config")
-const campground = require("../models/campground")
 
 const validateReview = (req, res, next) => {
   const result = reviewSchema.validate(req.body)

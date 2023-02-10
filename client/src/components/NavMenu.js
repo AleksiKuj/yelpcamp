@@ -9,7 +9,7 @@ function NavMenu({ user }) {
     window.location.reload(false)
   }
   return (
-    <Navbar collapseOnSelect fixed="top" variant="dark" expand="lg">
+    <Navbar collapseOnSelect fixed="top" bg="dark" variant="dark" expand="lg">
       <Container>
         <LinkContainer to="/">
           <Navbar.Brand>YelpCamp</Navbar.Brand>

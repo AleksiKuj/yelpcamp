@@ -6,13 +6,6 @@ const app = express()
 const morgan = require("morgan")
 const session = require("express-session")
 const { errorHandler } = require("./utils/middleware")
-const passport = require("passport")
-const LocalStrategy = require("passport-local")
-const User = require("./models/user")
-const passportLocal = require("passport-local").Strategy
-const cookieParser = require("cookie-parser")
-const bcrypt = require("bcryptjs")
-const bodyParser = require("body-parser")
 
 const campgroundsRouter = require("./controllers/campgrounds")
 const reviewsRouter = require("./controllers/reviews")
@@ -45,15 +38,6 @@ app.use(
     saveUninitialized: true,
   })
 )
-// app.use(cookieParser("secretCode"))
-// //app.use(flash())
-
-// app.use(passport.initialize())
-// app.use(passport.session())
-// passport.use(new LocalStrategy(User.authenticate()))
-
-// passport.serializeUser(User.serializeUser())
-// passport.deserializeUser(User.deserializeUser())
 
 app.use("/api/campgrounds", campgroundsRouter)
 app.use("/api/campgrounds/:id/reviews", reviewsRouter)

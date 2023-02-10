@@ -45,9 +45,7 @@ campgroundsRouter.get(
       })
       .populate({
         path: "user",
-        populate: {
-          path: "username",
-        },
+        select: "username",
       })
     res.json(campground)
   })
@@ -56,6 +54,7 @@ campgroundsRouter.get(
 campgroundsRouter.put(
   "/:id",
   upload.array("file"),
+  validateCampground,
   catchAsync(async (req, res) => {
     const body = req.body
     const geoData = await geocoder
@@ -101,38 +100,44 @@ const getTokenFrom = (request) => {
   }
 }
 
-campgroundsRouter.post("/", upload.array("file"), async (req, res) => {
-  const body = req.body
-  const geoData = await geocoder
-    .forwardGeocode({
-      query: body.location,
-      limit: 1,
-    })
-    .send()
-  console.log(geoData.body.features[0].geometry)
-  res.send("OK!")
+campgroundsRouter.post(
+  "/",
 
-  const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
-  const user = await User.findById(decodedToken.id)
-  console.log(req.files)
-  const campground = new Campground({
-    title: body.title,
-    description: body.description,
-    location: body.location,
-    price: body.price,
-    user: user._id,
-    geometry: geoData.body.features[0].geometry,
-  })
-  campground.images = req.files.map((f) => ({
-    url: f.path,
-    filename: f.filename,
-  }))
-  const savedCampground = await campground.save()
-  user.campgrounds = user.campgrounds.concat(savedCampground._id)
-  await user.save()
-  console.log(campground)
-  // res.json(savedCampground)
-})
+  upload.array("file"),
+  validateCampground,
+  async (req, res) => {
+    const body = req.body
+    const geoData = await geocoder
+      .forwardGeocode({
+        query: body.location,
+        limit: 1,
+      })
+      .send()
+    console.log(geoData.body.features[0].geometry)
+    res.send("OK!")
+
+    const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)
+    const user = await User.findById(decodedToken.id)
+    console.log(body.title)
+    const campground = new Campground({
+      title: body.title,
+      description: body.description,
+      location: body.location,
+      price: body.price,
+      user: user._id,
+      geometry: geoData.body.features[0].geometry,
+    })
+    campground.images = req.files.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }))
+    const savedCampground = await campground.save()
+    user.campgrounds = user.campgrounds.concat(savedCampground._id)
+    await user.save()
+    console.log(campground)
+    // res.json(savedCampground)
+  }
+)
 
 campgroundsRouter.delete(
   "/:id",

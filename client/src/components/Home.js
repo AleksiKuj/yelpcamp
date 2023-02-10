@@ -3,7 +3,10 @@ import { Link } from "react-router-dom"
 import Button from "react-bootstrap/Button"
 const Home = () => {
   return (
-    <div className="main-container d-flex w-100 h-100 py-5 flex-column text-center">
+    <div
+      className="main-container d-flex w-100 h-100 py-5 flex-column text-center"
+      style={{ minHeight: "95vh" }}
+    >
       <div
         className="cover-container d-flex w-100 h-100 p-3
        mx-auto flex-column"

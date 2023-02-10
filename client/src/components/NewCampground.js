@@ -6,21 +6,30 @@ import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
 import Card from "react-bootstrap/Card"
 
-const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
+const NewCampground = ({
+  setNotificationMessage,
+  setNotificationVariant,
+  user,
+}) => {
   const [validated, setValidated] = useState(false)
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
   const [description, setDescription] = useState("")
-  const [image, setImage] = useState(null)
   const [price, setPrice] = useState("")
   const [file, setFile] = useState(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login")
+    }
+  })
 
   const handleFileChange = (e) => {
     setFile(e.target.files)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -47,22 +56,21 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       formData.append("description", description)
       formData.append("price", price)
 
-      campgroundService.create(formData)
+      await campgroundService.create(formData)
       console.log(formData)
 
       setNotificationVariant("success")
       setNotificationMessage(`Succesfully added ${campground.title}`)
+      navigate("/campgrounds")
       setTimeout(() => {
         setNotificationMessage("")
       }, 5000)
-      setTimeout(() => {
-        navigate("/campgrounds")
-      }, 500)
+
       //
     }
   }
   return (
-    <div className="bg-light h-100 ">
+    <div className="bg-light h-100 " style={{ minHeight: "92vh" }}>
       <div className="d-flex container justify-content-center mt-5 mb-5">
         <Card style={{ width: "24rem" }} className="mt-5">
           <Card.Body>
@@ -76,6 +84,8 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
               <Form.Group className="mb-3">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
+                  minLength={5}
+                  maxLength={50}
                   type="text"
                   required
                   onChange={(e) => setTitle(e.target.value)}
@@ -90,6 +100,7 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
                 <Form.Label>Location</Form.Label>
                 <Form.Control
                   type="text"
+                  maxLength={50}
                   required
                   onChange={(e) => setLocation(e.target.value)}
                 />
@@ -104,6 +115,7 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
                 <Form.Control
                   type="file"
                   name="file"
+                  required
                   multiple
                   onChange={handleFileChange}
                 />
@@ -112,6 +124,7 @@ const NewCampground = ({ setNotificationMessage, setNotificationVariant }) => {
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   required
+                  maxLength={500}
                   as="textarea"
                   rows={3}
                   onChange={(e) => setDescription(e.target.value)}

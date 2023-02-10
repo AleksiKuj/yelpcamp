@@ -1,15 +1,15 @@
 const Joi = require("joi")
 
 module.exports.campgroundSchema = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string().required().max(50),
   price: Joi.number().required().min(0),
-  location: Joi.string().required(),
-  description: Joi.string().required(),
-  //image: Joi.string().required(),
+  location: Joi.string().required().max(50),
+  description: Joi.string().required().max(500),
+  deleteImages: Joi.string().optional().allow(""),
 })
 
 module.exports.reviewSchema = Joi.object({
-  body: Joi.string().required(),
+  body: Joi.string().required().min(5).max(500),
   rating: Joi.number().required().min(1).max(5),
 })
 
