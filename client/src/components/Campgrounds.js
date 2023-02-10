@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+
 import campgroundService from "../services/campgrounds"
-import Button from "react-bootstrap/Button"
-import Card from "react-bootstrap/Card"
 import ClusterMap from "./ClusterMap"
+import CampgroundCard from "./CampgroundCard"
 import "../stars.css"
 import Form from "react-bootstrap/Form"
+import "./campgrounds.css"
 
 const Campgrounds = () => {
   const [campgrounds, setCampgrounds] = useState([])
-  const [sort, setSort] = useState([])
+  const [sort, setSort] = useState("1")
   const [filter, setFilter] = useState("")
 
   useEffect(() => {
@@ -46,32 +46,7 @@ const Campgrounds = () => {
 
   const showCampgrounds = (sort) =>
     sort.map((campground) => (
-      <div key={campground.id} className="py-2">
-        <Card style={{}} className="d-flex flex-row">
-          <Card.Img
-            variant="top"
-            src={`${campground.images[0].url}`}
-            style={{ width: "350px", height: "250px" }}
-          />
-
-          <Card.Body>
-            <Card.Title>{campground.title}</Card.Title>
-            <Card.Text>
-              <p
-                className="starability-result"
-                data-rating={averageRating(campground.reviews)}
-              >
-                A Rated: {averageRating(campground.reviews)} stars
-              </p>
-            </Card.Text>
-            <Card.Text>{campground.description}</Card.Text>
-            <Card.Text className="text-muted">{campground.location}</Card.Text>
-            <Link to={campground.id}>
-              <Button variant="primary">View {campground.title}</Button>
-            </Link>
-          </Card.Body>
-        </Card>
-      </div>
+      <CampgroundCard campground={campground} averageRating={averageRating} />
     ))
 
   return (

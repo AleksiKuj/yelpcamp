@@ -11,7 +11,7 @@ const Home = () => {
         className="cover-container d-flex w-100 h-100 p-3
        mx-auto flex-column"
       >
-        <div className="px-3">
+        <div className="px-3 home-text">
           <h1>YelpCamp</h1>
           <p className="lead">Welcome to YelpCamp!</p>
           <p className="lead">

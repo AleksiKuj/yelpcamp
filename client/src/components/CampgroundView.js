@@ -150,9 +150,9 @@ const CampgroundView = ({
                 <Card.Title>
                   <p
                     className="starability-result"
-                    data-rating={averageRating()}
+                    data-rating={Math.ceil(averageRating())} // round down because starability cant process floats
                   >
-                    A Rated: {averageRating()} stars
+                    A Rated: {Math.ceil(averageRating())} stars
                   </p>{" "}
                 </Card.Title>
 
@@ -161,10 +161,17 @@ const CampgroundView = ({
               <ListGroup className="list-group-flush">
                 <ListGroup.Item>{currentCamp.location}</ListGroup.Item>
                 <ListGroup.Item>{currentCamp.price}€/night</ListGroup.Item>
-                <ListGroup.Item>
-                  {averageRating()} rating average with {initialReviews.length}{" "}
-                  reviews
-                </ListGroup.Item>
+
+                {isNaN(averageRating()) ? (
+                  ""
+                ) : (
+                  <ListGroup.Item>
+                    Average rating {averageRating()} with{" "}
+                    {currentCamp.reviews.length} review
+                    {currentCamp.reviews.length > 1 ? "s" : ""}
+                  </ListGroup.Item>
+                )}
+
                 <ListGroup.Item>
                   Added by {currentCamp.user.username}
                 </ListGroup.Item>

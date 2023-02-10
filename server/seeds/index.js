@@ -24,11 +24,6 @@ const imageList = [
     id: "",
   },
   {
-    url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1676024265/YelpCamp/lszwgkp8auttgslmsdmh.jpg",
-    filename: "YelpCamp/lszwgkp8auttgslmsdmh",
-    id: "",
-  },
-  {
     url: "https://res.cloudinary.com/dvl3hqoba/image/upload/v1676024265/YelpCamp/kmcwjttpeq0am8ggcbzw.jpg",
     filename: "YelpCamp/kmcwjttpeq0am8ggcbzw",
     id: "",
@@ -48,23 +43,17 @@ const seedDB = async () => {
   await Campground.deleteMany({})
   await Review.deleteMany({})
 
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 75; i++) {
     const randomImg = Math.floor(Math.random() * imageList.length)
     const randomImg2 = Math.floor(Math.random() * imageList.length)
-    const random1000 = Math.floor(Math.random() * 1000)
+    const randomCity = Math.floor(Math.random() * cities.length)
     const price = Math.floor(Math.random() * 20) + 10
     const camp = new Campground({
       user: "63e6315c631296bf343a8663",
-      location: `${cities[random1000].city}, ${cities[random1000].state}`,
+      location: `${cities[randomCity].properties.name}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       images: [imageList[randomImg], imageList[randomImg2]],
-      geometry: {
-        type: "Point",
-        coordinates: [
-          cities[random1000].longitude,
-          cities[random1000].latitude,
-        ],
-      },
+      geometry: cities[randomCity].geometry,
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores dolore officia aliquid veritatis animi et excepturi delectus nesciunt eos ratione ut consequatur nisi quo consectetur architecto, eius sed. Magni, nisi.",
       price,
