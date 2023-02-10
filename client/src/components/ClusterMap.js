@@ -10,7 +10,7 @@ const ClusterMap = ({ campgrounds }) => {
   const mapStyle = { width: "100" }
 
   useEffect(() => {
-    //if (map.current) return // initialize map only once
+    if (map.current) return // initialize map only once
     if (campgrounds.length !== 0) {
       setTimeout(() => {
         map.current = new mapboxgl.Map({
@@ -148,7 +148,7 @@ const ClusterMap = ({ campgrounds }) => {
             map.current.getCanvas().style.cursor = ""
           })
         })
-      }, 50)
+      }, 100)
     }
   })
 
