@@ -34,7 +34,6 @@ const Login = ({
       reviewsService.setToken(user.token)
       campgroundsService.setToken(user.token)
       setUser(user)
-      console.log("login success")
       window.localStorage.setItem("loggedUser", JSON.stringify(user))
       setNotificationVariant("success")
       setNotificationMessage(`Succesfully logged in as ${credentials.username}`)

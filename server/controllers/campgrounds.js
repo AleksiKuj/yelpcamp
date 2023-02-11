@@ -117,7 +117,18 @@ campgroundsRouter.post(
         limit: 1,
       })
       .send()
-    console.log(geoData.body.features[0].geometry)
+    if (geoData.body.features.length === 0) {
+      return res.status(401).json({
+        error: "invalid location",
+      })
+    }
+    // if (!(user && passwordCorrect)) {
+    //   return response.status(401).json({
+    //     error: "invalid username or password",
+    //   })
+    // }
+
+    console.log(geoData.body)
     res.send("OK!")
 
     const decodedToken = jwt.verify(getTokenFrom(req), config.SECRET)

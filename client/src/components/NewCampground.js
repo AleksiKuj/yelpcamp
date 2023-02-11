@@ -57,16 +57,22 @@ const NewCampground = ({
       formData.append("description", description)
       formData.append("price", price)
       formData.append("dateAdded", today.getTime().toString())
-
-      await campgroundService.create(formData)
-      console.log(formData)
-
-      setNotificationVariant("success")
-      setNotificationMessage(`Succesfully added ${campground.title}`)
-      navigate("/campgrounds")
-      setTimeout(() => {
-        setNotificationMessage("")
-      }, 5000)
+      try {
+        await campgroundService.create(formData)
+        setNotificationVariant("success")
+        setNotificationMessage(`Succesfully added ${campground.title}`)
+        navigate("/campgrounds")
+        setTimeout(() => {
+          setNotificationMessage("")
+        }, 5000)
+      } catch (e) {
+        setNotificationVariant("danger")
+        setNotificationMessage(`Error: Invalid location`)
+        setTimeout(() => {
+          setNotificationMessage("")
+        }, 5000)
+        console.log(e)
+      }
 
       //
     }

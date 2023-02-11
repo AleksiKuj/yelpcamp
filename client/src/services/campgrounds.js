@@ -19,8 +19,27 @@ const create = async (campground) => {
   const config = {
     headers: { Authorization: token },
   }
-  const res = await axios.post(baseUrl, campground, config)
-  return res.data
+  // try {
+  //   const res = await axios.post(`${baseUrl}/login`, user)
+  //   return res.data
+  // } catch (e) {
+  //   if (e.response) {
+  //     console.log(e.response.data)
+  //     throw new Error(e.response.data)
+  //   }
+  //   throw new Error("An error occurred")
+  // }
+  try {
+    const res = await axios.post(baseUrl, campground, config)
+    return res.data
+  } catch (e) {
+    if (e.response) {
+      throw new Error(e.response.data)
+    }
+    throw new Error("An error occurred")
+  }
+  // const res = await axios.post(baseUrl, campground, config)
+  // return res.data
 }
 
 const edit = async (id, campground) => {
