@@ -128,6 +128,7 @@ campgroundsRouter.post(
       description: body.description,
       location: body.location,
       price: body.price,
+      dateAdded: body.dateAdded,
       user: user._id,
       geometry: geoData.body.features[0].geometry,
     })

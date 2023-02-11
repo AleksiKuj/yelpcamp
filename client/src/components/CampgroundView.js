@@ -42,7 +42,6 @@ const CampgroundView = ({
       setLng(currentCamp.geometry.coordinates[0])
       setLat(currentCamp.geometry.coordinates[1])
       document.title = `YelpCamp: ${currentCamp.title}`
-      console.log(currentCamp.reviews)
     }
   }, [currentCamp])
 
@@ -118,6 +117,30 @@ const CampgroundView = ({
     return sum / initialReviews.length
   }
 
+  ///TIME STAMP
+  function formatDuration(durationInMilliseconds) {
+    const seconds = Math.floor(durationInMilliseconds / 1000)
+    const minutes = Math.floor(seconds / 60)
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
+    const months = Math.floor(days / 30)
+    const years = Math.floor(months / 12)
+
+    if (years > 0) {
+      return `${years} year${years > 1 ? "s" : ""} ago`
+    } else if (months > 0) {
+      return `${months} month${months > 1 ? "s" : ""} ago`
+    } else if (days > 0) {
+      return `${days} day${days > 1 ? "s" : ""} ago`
+    } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? "s" : ""} ago`
+    } else if (minutes > 0) {
+      return `${minutes} minute${minutes > 1 ? "s" : ""} ago`
+    } else {
+      return "Seconds ago"
+    }
+  }
+
   return (
     // CHANGE FROM GRID TO FLEX -> flex-row -> on mobile flex-col
     <div className="bg-light h-100 " style={{ minHeight: "92vh" }}>
@@ -159,14 +182,23 @@ const CampgroundView = ({
                 <Card.Text>{currentCamp.description}</Card.Text>
               </Card.Body>
               <ListGroup className="list-group-flush">
-                <ListGroup.Item>{currentCamp.location}</ListGroup.Item>
+                <ListGroup.Item>
+                  {" "}
+                  <img
+                    src={require("../assets/pin.png")}
+                    width="20"
+                    height="20"
+                    alt=""
+                  />{" "}
+                  {currentCamp.location}
+                </ListGroup.Item>
                 <ListGroup.Item>{currentCamp.price}€/night</ListGroup.Item>
 
                 {isNaN(averageRating()) ? (
                   ""
                 ) : (
                   <ListGroup.Item>
-                    Average rating {averageRating()} with{" "}
+                    Average rating {averageRating().toFixed(1)} with{" "}
                     {currentCamp.reviews.length} review
                     {currentCamp.reviews.length > 1 ? "s" : ""}
                   </ListGroup.Item>
@@ -190,11 +222,19 @@ const CampgroundView = ({
                 ""
               )}
 
-              <Card.Footer className="text-muted">2 days ago</Card.Footer>
+              <Card.Footer className="text-muted">
+                {currentCamp.dateAdded
+                  ? formatDuration(
+                      new Date().getTime().toString() - currentCamp.dateAdded
+                    )
+                  : ""}
+              </Card.Footer>
             </Card>
           </div>
+
           <div className="col-6  px-2 my-5 view-container">
             <div ref={mapContainer} className="map-container" />
+            {/* REVIEWS */}
             {user !== null ? (
               userHasReviews(user) === true ? (
                 <h2>Reviews</h2>
@@ -230,6 +270,7 @@ const CampgroundView = ({
                         </p>
 
                         <Card.Text>{review.body}</Card.Text>
+
                         {user !== null &&
                         user.username === review.user.username ? (
                           <Button
@@ -242,6 +283,12 @@ const CampgroundView = ({
                           ""
                         )}
                       </Card.Body>
+
+                      <Card.Footer className="text-muted">
+                        {formatDuration(
+                          new Date().getTime().toString() - review.dateAdded
+                        )}
+                      </Card.Footer>
                     </Card>
                   ))
                 : ""}

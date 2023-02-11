@@ -34,6 +34,7 @@ const campgroundSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  dateAdded: String,
 })
 
 campgroundSchema.set("toJSON", {

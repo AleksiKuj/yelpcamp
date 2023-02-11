@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
 import Image from "react-bootstrap/Image"
 import Card from "react-bootstrap/Card"
+import "./editCampground.css"
 
 const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   const [currentCamp, setCurrentCamp] = useState()
@@ -103,9 +104,9 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
   return (
     <div className="bg-light h-100 " style={{ minHeight: "92vh" }}>
       <div className="d-flex container justify-content-center mt-5 mb-5">
-        <Card style={{ width: "24rem" }} className="mt-5">
+        <Card className="mt-5 col-8 edit-card">
           <Card.Body>
-            <Card.Title>New Campground</Card.Title>
+            <Card.Title>Edit Campground</Card.Title>
             <Link to={`/campgrounds/${match.params.id}`}>Back</Link>
             <Form onSubmit={handleSubmit} noValidate validated={validated}>
               <Form.Group className="mb-3">
@@ -113,6 +114,7 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
                 <Form.Control
                   required
                   type="text"
+                  placeholder={currentCamp.title}
                   minLength={5}
                   maxLength={50}
                   value={title}
@@ -157,7 +159,7 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
                   as="textarea"
                   value={description}
                   placeholder={currentCamp.description}
-                  rows={3}
+                  rows={5}
                   onChange={(e) => setDescription(e.target.value)}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -187,7 +189,7 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
                 </InputGroup>
               </Form.Group>
 
-              <div className="mb-3">
+              <div className="mb-3 d-flex flex-row">
                 {currentCamp.images.map((image) => (
                   <div key={image.filename}>
                     <Image

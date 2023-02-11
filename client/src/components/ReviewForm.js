@@ -22,10 +22,15 @@ const ReviewForm = ({
     }
     setValidated(true)
     e.preventDefault()
-
+    const today = new Date()
+    // const year = today.getFullYear()
+    // let month = today.getMonth() + 1
+    // let day = today.getDate()
     const review = {
       body: reviewBody,
       rating,
+      //dateAdded: `${day}/${month}/${year}`,
+      dateAdded: today.getTime().toString(),
     }
     if (form.checkValidity()) {
       await reviewService.addReview(camp.id, review)

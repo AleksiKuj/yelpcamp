@@ -5,6 +5,8 @@ import Card from "react-bootstrap/Card"
 import "../stars.css"
 import "./campgrounds.css"
 import "../stars.css"
+
+//card used in campgrounds list
 const CampgroundCard = ({ campground, averageRating }) => {
   return (
     <div key={campground.id} className="py-2">
@@ -26,11 +28,25 @@ const CampgroundCard = ({ campground, averageRating }) => {
               A Rated: {Math.ceil(averageRating(campground.reviews))} stars
             </div>
           </Card.Text>
-          <Card.Text>{campground.description}</Card.Text>
-          <Card.Text className="text-muted">{campground.location}</Card.Text>
-          <Link to={campground.id}>
-            <Button variant="primary">View {campground.title}</Button>
-          </Link>
+          <Card.Text className="text-center">
+            {campground.description}
+          </Card.Text>
+          <Card.Text className="text-muted text-center">
+            <img
+              src={require("../assets/pin.png")}
+              width="20"
+              height="20"
+              alt=""
+            />{" "}
+            {campground.location}
+          </Card.Text>
+          <Card.Text className="text-muted text-center">
+            <Link to={campground.id} className="text-center">
+              <Button variant="primary" className="text-center">
+                View {campground.title}
+              </Button>
+            </Link>
+          </Card.Text>
         </Card.Body>
       </Card>
     </div>

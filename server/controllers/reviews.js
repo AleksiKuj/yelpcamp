@@ -37,6 +37,7 @@ reviewsRouter.post(
     const review = new Review({
       body: body.body,
       rating: body.rating,
+      dateAdded: body.dateAdded,
       user: user._id,
     })
 

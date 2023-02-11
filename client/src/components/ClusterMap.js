@@ -17,7 +17,7 @@ const ClusterMap = ({ campgrounds }) => {
           container: mapContainer.current,
           // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
           style: "mapbox://styles/mapbox/streets-v11",
-          center: [23.106, 53.578],
+          center: [21.106, 50.578],
           zoom: 3,
         })
         map.current.addControl(new mapboxgl.NavigationControl())

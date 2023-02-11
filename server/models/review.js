@@ -8,6 +8,7 @@ const reviewSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  dateAdded: String,
 })
 
 reviewSchema.set("toJSON", {

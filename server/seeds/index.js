@@ -4,8 +4,7 @@ const { places, descriptors } = require("./seedHelpers")
 const Campground = require("../models/campground")
 const Review = require("../models/review")
 
-const mongoUrl =
-  "mongodb+srv://fullstack:fullstack@cluster0.azj3yur.mongodb.net/yelp-camp-dev?retryWrites=true&w=majority"
+//const mongoUrl = config.DEV_MONGODB_URI
 
 mongoose
   .connect(mongoUrl)
@@ -49,11 +48,13 @@ const seedDB = async () => {
     const randomCity = Math.floor(Math.random() * cities.length)
     const price = Math.floor(Math.random() * 20) + 10
     const camp = new Campground({
-      user: "63e6315c631296bf343a8663",
+      // user: "63e6315c631296bf343a8663",// dev id
+      user: "63e775d9e8a01d126b3f8676",
       location: `${cities[randomCity].properties.name}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       images: [imageList[randomImg], imageList[randomImg2]],
       geometry: cities[randomCity].geometry,
+      dateAdded: new Date().getTime().toString(),
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores dolore officia aliquid veritatis animi et excepturi delectus nesciunt eos ratione ut consequatur nisi quo consectetur architecto, eius sed. Magni, nisi.",
       price,

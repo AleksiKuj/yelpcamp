@@ -90,6 +90,7 @@ const Login = ({
                 Login
               </Button>
             </Form>
+            <Card.Footer>Test credentials Test:Test</Card.Footer>
           </Card.Body>
         </Card>
       </div>

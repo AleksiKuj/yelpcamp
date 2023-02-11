@@ -62,26 +62,6 @@ usersRouter.post("/login", async (request, response) => {
   response.status(200).send({ token, username: user.username })
 })
 
-// usersRouter.post("/login", passport.authenticate("local"), (req, res) => {
-//   console.log("SIGNED IN")
-//   res.json("auth")
-// })
-
-// usersRouter.post("/login", (req, res, next) => {
-//   passport.authenticate("local", (err, user, info) => {
-//     if (err) throw err
-//     if (!user) res.send("No User Exists")
-//     else {
-//       req.logIn(user, (err) => {
-//         if (err) throw err
-//         //res.send(req.user)
-//         res.send("Successfully Authenticated")
-//         console.log(req.user)
-//       })
-//     }
-//   })(req, res, next)
-// })
-
 usersRouter.get("/getUser", (req, res) => {
   console.log(req.user)
   res.send(req.user)

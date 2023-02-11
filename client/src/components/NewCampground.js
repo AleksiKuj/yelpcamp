@@ -39,6 +39,7 @@ const NewCampground = ({
 
     setValidated(true)
     e.preventDefault()
+    const today = new Date()
     const campground = {
       title,
       location,
@@ -55,6 +56,7 @@ const NewCampground = ({
       formData.append("location", location)
       formData.append("description", description)
       formData.append("price", price)
+      formData.append("dateAdded", today.getTime().toString())
 
       await campgroundService.create(formData)
       console.log(formData)

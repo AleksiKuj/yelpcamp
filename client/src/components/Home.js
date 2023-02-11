@@ -12,12 +12,9 @@ const Home = () => {
        mx-auto flex-column"
       >
         <div className="px-3 home-text">
-          <h1>YelpCamp</h1>
-          <p className="lead">Welcome to YelpCamp!</p>
-          <p className="lead">
-            Jump right in and explore our many campgrounds. Feel free to share
-            some of your own and comment on others!
-          </p>
+          <h1>
+            <b>Welcome to YelpCamp</b>
+          </h1>
           <Link to="/campgrounds">
             <Button variant="light" size="lg" className="font-weight-bold">
               View Campgrounds

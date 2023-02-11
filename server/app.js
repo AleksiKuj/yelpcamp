@@ -11,8 +11,16 @@ const campgroundsRouter = require("./controllers/campgrounds")
 const reviewsRouter = require("./controllers/reviews")
 const usersRouter = require("./controllers/users")
 
-const mongoUrl = config.MONGODB_URI
+// const mongoUrl = config.MONGODB_URI
+// const devMongoUrl = config.DEV_MONGODB_URI
 
+let mongoUrl = ""
+if (process.env.NODE_ENV === "dev") {
+  mongoUrl = config.DEV_MONGODB_URI
+} else {
+  mongoUrl = config.MONGODB_URI
+}
+console.log(mongoUrl)
 mongoose
   .connect(mongoUrl)
   .then((result) => {
