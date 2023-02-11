@@ -7,6 +7,8 @@ let SECRET = process.env.SECRET
 let CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
 let CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET
 let MAPBOX_TOKEN = process.env.MAPBOX_TOKEN
+let PORT = process.env.PORT || 3001
+
 module.exports = {
   MONGODB_URI,
   CLOUDINARY_API_KEY,
@@ -15,4 +17,5 @@ module.exports = {
   CLOUDINARY_SECRET,
   MAPBOX_TOKEN,
   DEV_MONGODB_URI,
+  PORT,
 }

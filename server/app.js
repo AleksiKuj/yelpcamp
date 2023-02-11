@@ -4,7 +4,6 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const app = express()
 const morgan = require("morgan")
-const session = require("express-session")
 const { errorHandler } = require("./utils/middleware")
 
 const campgroundsRouter = require("./controllers/campgrounds")
@@ -15,11 +14,13 @@ const usersRouter = require("./controllers/users")
 // const devMongoUrl = config.DEV_MONGODB_URI
 
 let mongoUrl = ""
+
 if (process.env.NODE_ENV === "dev") {
   mongoUrl = config.DEV_MONGODB_URI
 } else {
   mongoUrl = config.MONGODB_URI
 }
+mongoose.set("strictQuery", false)
 console.log(mongoUrl)
 mongoose
   .connect(mongoUrl)
@@ -29,10 +30,9 @@ mongoose
   .catch((error) => {
     console.log("error: ", error.message)
   })
-
+app.use(express.json())
 app.use(morgan("tiny"))
 app.use(cors())
-app.use(express.json())
 
 app.use(express.static("build"))
 
