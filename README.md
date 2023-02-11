@@ -4,9 +4,10 @@ Responsive web application with similar functionality to yelp but for campground
 
 Inspired by Colt Steele's YelpCamp but with added functionality and different technologies used.
 
+Demo on https://summer-shape-6377.fly.dev/
+
 Account credentials for testing is Test:Test
 ![](https://github.com/AleksiKuj/yelpcamp/blob/master/images/home.PNG)
-
 
 ## Tech Stack
 

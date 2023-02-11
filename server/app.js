@@ -5,6 +5,7 @@ const cors = require("cors")
 const app = express()
 const morgan = require("morgan")
 const { errorHandler } = require("./utils/middleware")
+const path = require("path")
 
 const campgroundsRouter = require("./controllers/campgrounds")
 const reviewsRouter = require("./controllers/reviews")
@@ -34,11 +35,17 @@ app.use(express.json())
 app.use(morgan("tiny"))
 app.use(cors())
 
-app.use(express.static("build"))
+// use this for react-router to work when deployed
+app.use(express.static(path.join(__dirname, "build")))
 
 app.use("/api/campgrounds", campgroundsRouter)
 app.use("/api/campgrounds/:id/reviews", reviewsRouter)
 app.use("/api/users", usersRouter)
+
+// use this for react-router to work when deployed
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"))
+})
 
 app.use(errorHandler)
 app.use((req, res) => {
