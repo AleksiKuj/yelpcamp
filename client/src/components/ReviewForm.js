@@ -23,23 +23,25 @@ const ReviewForm = ({
     setValidated(true)
     e.preventDefault()
     const today = new Date()
-    // const year = today.getFullYear()
-    // let month = today.getMonth() + 1
-    // let day = today.getDate()
+
     const review = {
       body: reviewBody,
       rating,
-      //dateAdded: `${day}/${month}/${year}`,
       dateAdded: today.getTime().toString(),
     }
     if (form.checkValidity()) {
-      await reviewService.addReview(camp.id, review)
-      setNotificationVariant("success")
-      setNotificationMessage(`Succesfully added ${rating} star review`)
-      window.location.reload(false)
-      setTimeout(() => {
-        setNotificationMessage("")
-      }, 5000)
+      try {
+        await reviewService.addReview(camp.id, review)
+        console.log("moikka")
+        setNotificationVariant("success")
+        setNotificationMessage(`Succesfully added ${rating} star review`)
+        window.location.reload(false)
+        setTimeout(() => {
+          setNotificationMessage("")
+        }, 5000)
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
   return (

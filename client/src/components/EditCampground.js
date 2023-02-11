@@ -53,7 +53,7 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
     setFile(e.target.files)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -84,18 +84,21 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
       formData.append("description", description)
       formData.append("price", price)
       formData.append("deleteImages", deleteImages)
+      formData.append("dateAdded", currentCamp.dateAdded)
+      try {
+        await campgroundService.edit(id, formData)
 
-      campgroundService.edit(id, formData)
-      console.log(formData)
-
-      setNotificationVariant("success")
-      setNotificationMessage(
-        `Succesfully edited ${campground.title}. It might take a few seconds for the data to update.`
-      )
-      setTimeout(() => {
-        setNotificationMessage("")
-      }, 10000)
-      navigate(`/campgrounds/${currentCamp.id}`)
+        setNotificationVariant("success")
+        setNotificationMessage(
+          `Succesfully edited ${campground.title}. It might take a few seconds for the data to update.`
+        )
+        setTimeout(() => {
+          setNotificationMessage("")
+        }, 10000)
+        navigate(`/campgrounds/${currentCamp.id}`)
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
   if (!currentCamp) {
@@ -115,7 +118,7 @@ const EditCampground = ({ setNotificationMessage, setNotificationVariant }) => {
                   required
                   type="text"
                   placeholder={currentCamp.title}
-                  minLength={5}
+                  minLength={1}
                   maxLength={50}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}

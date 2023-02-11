@@ -75,6 +75,7 @@ campgroundsRouter.put(
       description: body.description,
       location: body.location,
       price: body.price,
+      dateAdded: body.dateAdded,
       geometry: geoData.body.features[0].geometry,
     })
     console.log("deleteimages", body.deleteImages.split(","))
@@ -117,17 +118,12 @@ campgroundsRouter.post(
         limit: 1,
       })
       .send()
+
     if (geoData.body.features.length === 0) {
       return res.status(401).json({
         error: "invalid location",
       })
     }
-    // if (!(user && passwordCorrect)) {
-    //   return response.status(401).json({
-    //     error: "invalid username or password",
-    //   })
-    // }
-
     console.log(geoData.body)
     res.send("OK!")
 
@@ -151,7 +147,6 @@ campgroundsRouter.post(
     user.campgrounds = user.campgrounds.concat(savedCampground._id)
     await user.save()
     console.log(campground)
-    // res.json(savedCampground)
   }
 )
 

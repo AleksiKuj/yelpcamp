@@ -92,7 +92,7 @@ const NewCampground = ({
               <Form.Group className="mb-3">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
-                  minLength={5}
+                  minLength={1}
                   maxLength={50}
                   type="text"
                   required
